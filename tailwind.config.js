@@ -7,7 +7,9 @@ export default {
     colors: {
       primary: colors.purple,
       secondary: colors.lime,
-      bg: colors.gray[200]
+      tertiary: colors.red,
+      bg: colors.gray[200],
+      white: colors.white
     },
     extend: {},
   },
