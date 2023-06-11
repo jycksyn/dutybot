@@ -1,12 +1,12 @@
 <script>
-	import Rand from "rand-seed";
+	import seedrandom from "seedrandom";
 	import { getContext } from "svelte";
 
     const seed = getContext('seed');
 
-    const generator = new Rand(seed);
+    const generator = seedrandom(seed);
 
-    const rand = () => generator.next();
+    const rand = () => generator();
 
     const particles = (
         [...Array(400)].map(_ => [
