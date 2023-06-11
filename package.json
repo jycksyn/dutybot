@@ -14,6 +14,7 @@
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.5.0",
+		"@types/seedrandom": "^3.0.5",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
 		"@typescript-eslint/parser": "^5.45.0",
 		"autoprefixer": "^10.4.14",
@@ -35,6 +36,6 @@
 		"@prisma/client": "^4.15.0",
 		"class-variance-authority": "^0.6.0",
 		"prisma": "^4.15.0",
-		"rand-seed": "^1.0.2"
+		"seedrandom": "^3.0.5"
 	}
 }
