@@ -6,7 +6,7 @@
 			intent: {
 				primary: 'bg-primary-950',
 				secondary: 'bg-secondary-700',
-				tertiary: 'bg-tertiary-950'
+				tertiary: 'bg-tertiary-900'
 			}
 		}
 	});
@@ -16,7 +16,7 @@
 			intent: {
 				primary: 'bg-primary-800',
 				secondary: 'bg-secondary-500',
-				tertiary: 'bg-tertiary-800'
+				tertiary: 'bg-tertiary-700'
 			}
 		}
 	});
