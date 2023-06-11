@@ -18,7 +18,7 @@
 </script>
 
 {#each particles as [size, pos, start], i}
-    <div class="-z-50 animate-particle absolute rounded bg-white" style="
+    <div class="-z-50 motion-safe:animate-particle absolute rounded bg-white" style="
         height: {size}px;
         width: {size}px;
         top: {pos}vh;
