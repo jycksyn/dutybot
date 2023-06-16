@@ -1,10 +1,19 @@
 <script>
-	import { setContext } from "svelte";
-  import "../app.css";
+	import { setContext } from 'svelte';
+	import '../app.css';
 
-  export let data;
+	// Your selected Skeleton theme:
+	import '@skeletonlabs/skeleton/themes/theme-gold-nouveau.css';
 
-  setContext('seed', data.seed);
+	// This contains the bulk of Skeletons required styles:
+	import '@skeletonlabs/skeleton/styles/skeleton.css';
+
+	// Finally, your application's global stylesheet (sometimes labeled 'app.css')
+	import '../app.postcss';
+
+	export let data;
+
+	setContext('seed', data.seed);
 </script>
 
 <slot />
