@@ -10,6 +10,48 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Widget {
-  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+model AuthUser {
+  id           String        @id @unique
+  auth_session AuthSession[]
+  auth_key     AuthKey[]
+  userId       String        @unique
+  user         User          @relation(fields: [userId], references: [id])
+  @@map("auth_user")
+}
+
+model AuthSession {
+  id             String   @id @unique
+  user_id        String
+  active_expires BigInt
+  idle_expires   BigInt
+  auth_user      AuthUser @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("auth_session")
+}
+
+model AuthKey {
+  id              String   @id @unique
+  hashed_password String?
+  user_id         String
+  primary_key     Boolean
+  expires         BigInt?
+  auth_user       AuthUser @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("auth_key")
+}
+
+model User {
+  id          String @id @default(uuid())
+  auth_users  AuthUser[]
+  email       String @unique
+  username    String @unique
+  name        String 
+}
+
+enum Repeat {
+  DAILY
+  WEEKLY
+  MONTHLY
 }
