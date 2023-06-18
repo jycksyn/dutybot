@@ -1,6 +1,6 @@
 <script>
-	import Button from '../components/ui/Button.svelte';
-	import Particles from '../components/ui/hero/Particles.svelte';
+	import Button from '$lib/components/ui/Button.svelte';
+	import Particles from '$lib/components/ui/hero/Particles.svelte';
 </script>
 
 <div class="bg-bg min-h-screen">

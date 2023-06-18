@@ -43,11 +43,12 @@ model AuthKey {
 }
 
 model User {
-  id          String @id @default(uuid())
-  auth_users  AuthUser[]
-  email       String @unique
-  username    String @unique
-  name        String 
+  id            String @id @default(uuid())
+  auth_user_id  String
+  auth_user     AuthUser?
+  email         String @unique
+  username      String @unique
+  name          String 
 }
 
 enum Repeat {
