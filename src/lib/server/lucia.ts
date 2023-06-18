@@ -4,9 +4,10 @@ import { sveltekit } from "lucia-auth/middleware";
 import prisma from "@lucia-auth/adapter-prisma";
 import { PrismaClient } from "@prisma/client";
 import { dev } from "$app/environment";
+import { db } from "./db";
 
 export const auth = lucia({
-	adapter: prisma(new PrismaClient()),
+	adapter: prisma(db),
 	env: dev ? "DEV" : "PROD",
 	middleware: sveltekit()
 });

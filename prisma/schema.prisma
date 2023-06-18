@@ -14,8 +14,8 @@ model AuthUser {
   id           String        @id @unique
   auth_session AuthSession[]
   auth_key     AuthKey[]
-  userId       String        @unique
-  user         User          @relation(fields: [userId], references: [id])
+  userId       String?        @unique
+  user         User?
   @@map("auth_user")
 }
 
@@ -43,12 +43,12 @@ model AuthKey {
 }
 
 model User {
-  id            String @id @default(uuid())
-  auth_user_id  String
-  auth_user     AuthUser?
-  email         String @unique
-  username      String @unique
-  name          String 
+  id            String    @id @default(uuid())
+  auth_user_id  String    @unique
+  auth_user     AuthUser  @relation(fields: [auth_user_id], references: [id])
+  email         String?    @unique
+  username      String?    @unique
+  name          String? 
 }
 
 enum Repeat {

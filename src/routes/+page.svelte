@@ -18,7 +18,7 @@
                     <!-- <Button intent="secondary">
                         Sign In
                     </Button> -->
-                    <Button href="/auth/login" intent="success">
+                    <Button href="/auth/login" intent="secondary">
                         Sign Up
                     </Button>
 				</div>
