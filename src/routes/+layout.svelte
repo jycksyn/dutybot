@@ -1,6 +1,6 @@
 <script>
 	import { setContext } from 'svelte';
-	import '../app.css';
+	import "../app.css"
 
 	// Your selected Skeleton theme:
 	import '@skeletonlabs/skeleton/themes/theme-gold-nouveau.css';
@@ -9,7 +9,7 @@
 	import '@skeletonlabs/skeleton/styles/skeleton.css';
 
 	// Finally, your application's global stylesheet (sometimes labeled 'app.css')
-	import '../app.postcss';
+	// import '../app.postcss';
 
 	export let data;
 

@@ -10,16 +10,16 @@ export default {
     )
   ],
   theme: {
-    colors: {
-      primary: colors.purple,
-      secondary: colors.lime,
-      tertiary: colors.red,
-      bg: colors.gray[200],
-      white: colors.white
-    },
-    fontFamily: {
-      'sans': ["Quicksand", "sans-serif"]
-    },
+    // colors: {
+    //   primary: colors.purple,
+    //   secondary: colors.lime,
+    //   tertiary: colors.red,
+    //   bg: colors.gray[200],
+    //   white: colors.white
+    // },
+    // fontFamily: {
+    //   'sans': ["Quicksand", "sans-serif"]
+    // },
     extend: {
       animation: {
         'particle': 'particle 60s linear infinite',
@@ -33,6 +33,7 @@ export default {
     },
   },
 	plugins: [
+		require('@tailwindcss/forms'),
 		...require('@skeletonlabs/skeleton/tailwind/skeleton.cjs')()
 	]
 }
