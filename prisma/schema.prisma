@@ -11,9 +11,10 @@ datasource db {
 }
 
 model AuthUser {
-  id           String        @id @unique
+  id           String         @id @unique
   auth_session AuthSession[]
   auth_key     AuthKey[]
+  email        String?        @unique
   userId       String?        @unique
   user         User?
   @@map("auth_user")
@@ -43,11 +44,9 @@ model AuthKey {
 }
 
 model User {
-  id            String    @id @default(uuid())
-  auth_user_id  String    @unique
-  auth_user     AuthUser  @relation(fields: [auth_user_id], references: [id])
+  id            String     @id @unique
+  auth_user     AuthUser   @relation(fields: [id], references: [id])
   email         String?    @unique
-  username      String?    @unique
   name          String? 
 }
 

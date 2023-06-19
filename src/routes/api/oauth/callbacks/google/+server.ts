@@ -2,8 +2,9 @@ import { db } from "$lib/server/db";
 import { googleAuth } from "$lib/server/google";
 import { auth } from "$lib/server/lucia";
 import type { User } from "@prisma/client";
-import { redirect, type RequestHandler } from "@sveltejs/kit";
+import { redirect, resolvePath, type RequestHandler } from "@sveltejs/kit";
 import type { User as LuciaUser } from "lucia-auth";
+import { isNil, omitBy } from "lodash";
 
 export const GET: RequestHandler = async ({ cookies, url, locals }) => {
     const code = url.searchParams.get("code");
@@ -16,42 +17,25 @@ export const GET: RequestHandler = async ({ cookies, url, locals }) => {
     }
 
     try {
-        const { existingUser, providerUser, createUser } = await googleAuth.validateCallback(code ?? "");
+        var { existingUser, providerUser, createUser } = await googleAuth.validateCallback(code ?? "");
 
-        const getUser = async (): Promise<[User, LuciaUser]> => {
-            if (existingUser) {
-                let user = await db.user.findUnique({
-                    where: {
-                        auth_user_id: existingUser.userId
-                    }
-                });
+        var authUser: LuciaUser;
+        var user: User | null = null;
 
-                if (!user) {
-                    user = await db.user.create({
-                        data: {
-                            auth_user_id: existingUser.userId,
-                            email: providerUser.email
-                        }
-                    });
-                }
-                return [user, existingUser];
-            };
+        if (existingUser) {
+            authUser = existingUser;
 
-            const authUser = await createUser({
-                username: providerUser.email
-            });
-
-            const user = await db.user.create({
-                data: {
-                    auth_user_id: authUser.userId,
-                    email: providerUser.email
+            user = await db.user.findUnique({
+                where: {
+                    id: authUser.userId
                 }
             });
-
-            return [user, authUser];
+        } else {
+            authUser = await createUser({
+                email: providerUser.email
+            });
         }
 
-        const [user, authUser] = await getUser();
         const session = await auth.createSession(authUser.userId);
         locals.auth.setSession(session);
     } catch (e) {
@@ -59,6 +43,18 @@ export const GET: RequestHandler = async ({ cookies, url, locals }) => {
         return new Response(null, {
             status: 500
         });
+    }
+
+    if (!user) {
+        const params = new URLSearchParams(omitBy({
+            name: providerUser.name,
+            email: providerUser.email
+        }, isNil) as Record<string, string>).toString();
+
+        throw redirect(
+            302,
+            "/auth/completeprofile?"+params
+        )
     }
 
     throw redirect(302, "/");
