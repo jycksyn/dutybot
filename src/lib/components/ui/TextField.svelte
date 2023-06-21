@@ -1,24 +1,28 @@
 <script lang="ts">
-    import { cva, type VariantProps } from 'class-variance-authority';
-    import type { HTMLInputAttributes } from "svelte/elements";
-    import {omit} from "lodash";
+	import { cva } from 'class-variance-authority';
 
-	interface $$Props extends HTMLInputAttributes {
-        label: string,
-        errors?: string[],
-        class?: string
-    }
+	import type { z, AnyZodObject } from 'zod';
+	import type { ZodValidation, FormPathLeaves } from 'sveltekit-superforms';
+	import { formFieldProxy, type SuperForm } from 'sveltekit-superforms/client';
 
-    export let label: $$Props['label'];
-    export let errors: $$Props['errors'] = undefined;
-    export let value = "";
+	type T = $$Generic<AnyZodObject>;
+
+	export let form: SuperForm<ZodValidation<T>, unknown>;
+	export let field: FormPathLeaves<z.infer<T>>;
+
+	const { value, errors, constraints } = formFieldProxy(form, field);
 </script>
 
-
-<label class={cva("label flex flex-col items-stretch")({ class: $$restProps.class })}>
-	<span>{label}</span>
-	<input {...$$restProps} bind:value class:input-error={errors?.length} type="text" class="input"/>
-	{#each errors ?? [] as error} 
-        <small class="text-red-600">{error}</small>
-    {/each}
-</label>
+<label class={cva('label flex flex-col items-stretch')({ class: $$restProps.class })}>
+    <span>{field}</span>
+    <input
+      name={field}
+      type="text"
+      aria-invalid={$errors ? 'true' : undefined}
+      bind:value={$value}
+      {...$constraints}
+      {...$$restProps}
+      class="input"
+  />
+  {#if $errors}<span class="text-red-600">{$errors}</span>{/if}
+  </label>

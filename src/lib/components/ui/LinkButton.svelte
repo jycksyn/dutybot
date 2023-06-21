@@ -1,6 +1,6 @@
 <script lang="ts">
-    import type { HTMLButtonAttributes, HTMLAnchorAttributes } from "svelte/elements";
-	import { cva, type VariantProps } from 'class-variance-authority';
+    import { cva, type VariantProps } from 'class-variance-authority';
+    import type { HTMLAnchorAttributes } from "svelte/elements";
 
 	const button = cva('btn variant-filled text-primary-50-900-token', {
 		variants: {
@@ -22,6 +22,6 @@
 	export let disabled: $$Props['disabled'] = false;
 </script>
 
-<button {disabled} {...$$props} class={button({ intent, disabled, class: $$props.class })}>
+<a href={disabled ? '#' : $$props.href} {...$$props} class={button({ intent, class: $$props.class })}>
 	<slot />
-</button>
+</a>

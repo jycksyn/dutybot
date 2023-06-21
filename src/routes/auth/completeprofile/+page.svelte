@@ -9,33 +9,27 @@
 
 	export let data: PageData;
 
-	const { form, enhance, errors } = superForm(data.form, {
+	const form = superForm(data.form, {
 		validators: userInfoSchema
 	});
+
+	const {enhance, form: formStore, allErrors, message} = form;
 </script>
 
-<!-- <SuperDebug data={{$form, $errors}} /> -->
+<SuperDebug data={$formStore} />
 
 <h2 class="h2">Complete your profile</h2>
 
 <form use:enhance class="flex items-stretch justify-center flex-col gap-4" method="post">
-	<TextField
-		label="Name"
-		placeholder="John Doe"
-		bind:value={$form.name}
-		bind:errors={$errors.name}
-	/>
+	<TextField {form} field="name" />
 
 	<div class="grid grid-cols-4 items-center justify-items-stretch">
-		<Gravatar class="col-span-1" email={$form.email} />
-		<TextField
-			label="Email"
-			class="col-span-3"
-			placeholder=""
-			bind:value={$form.email}
-			bind:errors={$errors.email}
-		/>
+		<Gravatar class="col-span-1" email={$formStore.email} />
+		<TextField {form} field="email" class="col-span-3" />
 	</div>
 
-	<Button intent="secondary">Submit</Button>
+	<Button disabled={!!$allErrors.length} intent="secondary">Submit</Button>
+	{#if $message}
+		<small class="text-red-600">{$message}</small>
+	{/if}
 </form>
