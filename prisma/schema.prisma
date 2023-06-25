@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "cockroachdb"
-  url      = env("DATABASE_URL")
+  provider          = "cockroachdb"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOWDB_URL")
 }
 
 model AuthUser {
@@ -44,14 +45,143 @@ model AuthKey {
 }
 
 model User {
-  id            String     @id @unique
-  auth_user     AuthUser   @relation(fields: [id], references: [id])
-  email         String?    @unique
+  id            String      @id @unique
+  auth_user     AuthUser    @relation(fields: [id], references: [id])
+  email         String?     @unique
   name          String? 
+  joined        DateTime    @default(now())
+  prefersEmoji  Boolean     @default(false)
+  emoji         String?
+  color         String?
+  member_of     GroupMember[]        
+}
+
+model Group {
+  id            String        @id @unique @default(uuid())
+  name          String
+  members       GroupMember[] @relation("members")
+  owner_id      String        @unique
+  owner         GroupMember   @relation("owner", references: [id], fields: [owner_id])
+  sessions      Session[]
+}
+
+model GroupMember {
+  id            String    @id @unique @default(uuid())
+  group_id      String
+  group         Group     @relation("members", references: [id], fields: [group_id])
+  ownedGroup    Group?    @relation("owner")
+  user_id       String    
+  user          User      @relation(references: [id], fields: [user_id])
+  is_admin      Boolean   @default(false)
+  is_respondent Boolean   @default(false)
+  nickname      String?
+  responses     Response[]
+  shifts        ShiftAssignment[]
+
+  @@unique([group_id, user_id])
+	@@map("GroupMembers")
+}
+
+model Session {
+  id            String         @id @unique @default(uuid())
+  group_id      String
+  group         Group          @relation(fields: [group_id], references: [id])
+  start         DateTime       @db.Date
+  end           DateTime       @db.Date
+  responses     Response[]
+  shift_types   ShiftType[]
+  calendars     DutyCalendar[] @relation("all_calendars")
+  final_cal_id  String?        @unique
+  final_cal     DutyCalendar?  @relation("final_calendar", fields: [final_cal_id], references: [id])
+  status        SessionStatus
+}
+
+enum SessionStatus {
+  HIDDEN
+  CLOSED
+  OPEN_FOR_RESPONSES
+  CALENDAR_PUBLISHED
+}
+
+model Response {
+  id            String      @id @unique @default(uuid())
+  timestamp     DateTime    @default(now())
+  session_id    String
+  session       Session     @relation(fields: [session_id], references: [id])
+  respondent_id String
+  respondent    GroupMember @relation(fields: [respondent_id], references: [id])
+  preferences   Preference[]
+}
+
+model Preference {
+  response_id   String
+  response      Response    @relation(fields: [response_id], references: [id])
+  shift_id      String
+  shift         Shift       @relation(fields: [shift_id], references: [id])
+  ranking       Int
+
+  @@id([response_id, shift_id])
+}
+
+model ShiftType {
+  id            String      @id @unique @default(uuid())
+  session_id    String
+  session       Session     @relation(fields: [session_id], references: [id])
+  start_date    DateTime    @db.Date
+  end_date      DateTime    @db.Date
+  repeat        Repeat
+  start_time    DateTime    @db.Time
+  end_time      DateTime    @db.Time
+  shifts        Shift[]
+  repeat_days   ShiftTypeRepeat[]
 }
 
 enum Repeat {
+  NEVER
   DAILY
   WEEKLY
   MONTHLY
+}
+
+model ShiftTypeRepeat {
+  type_id       String
+  type          ShiftType   @relation(fields: [type_id], references: [id])
+  weekday       Int
+
+  @@id([type_id, weekday])
+}
+
+model Shift {
+  id            String      @id @unique @default(uuid())
+  type_id       String
+  type          ShiftType   @relation(fields: [type_id], references: [id])
+  date          DateTime    @db.Date
+  preferences   Preference[]
+  assigned_to   ShiftAssignment[]
+}
+
+model DutyCalendar {
+  id            String            @id @unique @default(uuid())
+  session_id    String
+  session       Session           @relation("all_calendars", fields: [session_id], references: [id])
+  final_for     Session?          @relation("final_calendar")
+  created       DateTime          @default(now())
+  assignments   ShiftAssignment[]
+}
+
+model ShiftAssignment {
+  cal_id        String
+  calendar      DutyCalendar  @relation(fields: [cal_id], references: [id])
+  member_id     String
+  member        GroupMember   @relation(fields: [member_id], references: [id])
+  shift_id      String
+  shift         Shift         @relation(fields: [shift_id], references: [id])
+  assigned      ShiftAssigned @default(AUTOMATICALLY)
+
+  @@id([cal_id, shift_id])
+}
+
+enum ShiftAssigned {
+  MANUALLY
+  AUTOMATICALLY
 }
