@@ -2,7 +2,7 @@
     import type { HTMLButtonAttributes, HTMLAnchorAttributes } from "svelte/elements";
 	import { cva, type VariantProps } from 'class-variance-authority';
 
-	const button = cva('btn variant-filled text-primary-50-900-token', {
+	const button = cva('btn text-primary-50-900-token', {
 		variants: {
 			intent: {
 				primary: 'bg-primary-700-200-token',
@@ -12,6 +12,9 @@
 			},
 			disabled: {
 				true: 'disabled'
+			},
+			fullWidth: {
+				true: 'self-stretch w-auto'
 			}
 		}
 	});
@@ -20,8 +23,9 @@
 
 	export let intent: $$Props['intent'] = 'primary';
 	export let disabled: $$Props['disabled'] = false;
+	export let fullWidth: $$Props['fullWidth'] = false;
 </script>
 
-<button {disabled} {...$$props} class={button({ intent, disabled, class: $$props.class })}>
+<button on:click {disabled} {...$$props} class={button({ intent, disabled, fullWidth, class: $$props.class })}>
 	<slot />
 </button>

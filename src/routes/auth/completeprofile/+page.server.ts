@@ -46,6 +46,6 @@ export const actions = {
             return message(form, "There was an unknown error", {status: 403});
         }
 
-        throw redirect(302, '/');
+        throw redirect(302, '/dashboard');
     }
 }
