@@ -1,5 +1,5 @@
 <script>
-	import LinkButton from '$lib/components/ui/LinkButton.svelte';
+	import Button from '$lib/components/ui/Button.svelte';
 	import Particles from '$lib/components/ui/hero/Particles.svelte';
 </script>
 
@@ -18,9 +18,9 @@
                     <!-- <Button intent="secondary">
                         Sign In
                     </Button> -->
-                    <LinkButton href="/auth/login" intent="secondary">
+                    <Button href="/auth/login" intent="secondary">
                         Sign Up
-                    </LinkButton>
+                    </Button>
 				</div>
 			</div>
 		</div>
