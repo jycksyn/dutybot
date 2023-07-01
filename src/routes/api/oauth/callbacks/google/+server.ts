@@ -4,7 +4,8 @@ import { auth } from "$lib/server/lucia";
 import type { User } from "@prisma/client";
 import { redirect, resolvePath, type RequestHandler } from "@sveltejs/kit";
 import type { User as LuciaUser } from "lucia-auth";
-import { isNil, omitBy } from "lodash";
+import lodash from "lodash";
+const { isNil, omitBy } = lodash;
 
 export const GET: RequestHandler = async ({ cookies, url, locals }) => {
     const code = url.searchParams.get("code");

@@ -1,5 +1,5 @@
 import { userInfoSchema } from '$lib/forms';
-import { fail, redirect } from '@sveltejs/kit';
+import { fail, redirect, type Action, type Actions } from '@sveltejs/kit';
 import { message, superValidate } from 'sveltekit-superforms/server';
 import type { PageServerLoad } from './$types';
 import { db } from '$lib/server/db';
@@ -10,7 +10,7 @@ export const load: PageServerLoad = async ({ url, locals }) => {
     return { form };
 }
 
-export const actions = {
+export const actions: Actions = {
     default: async ({ request, locals }) => {
         const { user } = await locals.auth.validateUser();
         if (!user) throw redirect(302, '/auth/login');

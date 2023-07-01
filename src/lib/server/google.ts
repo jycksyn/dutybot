@@ -5,5 +5,5 @@ import { dev } from "$app/environment";
 
 export const googleAuth = google(auth, {
     clientId, clientSecret,
-    redirectUri: `${dev ? "http://localhost:5173" : "https://dutybot.vercel.app"}/api/oauth/callbacks/google`
+    redirectUri: `${dev ? "http://localhost:5173" : "https://" + process.env.VERCEL_URL}/api/oauth/callbacks/google`
 });
