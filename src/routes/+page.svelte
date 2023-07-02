@@ -1,5 +1,4 @@
 <script>
-	import Button from '$lib/components/ui/Button.svelte';
 	import Particles from '$lib/components/ui/hero/Particles.svelte';
 </script>
 
@@ -15,12 +14,9 @@
 					Your new yes-manager.
 				</p>
 				<div class="mt-10 flex items-center justify-center gap-x-6">
-                    <!-- <Button intent="secondary">
-                        Sign In
-                    </Button> -->
-                    <Button href="/auth/login" intent="secondary">
+                    <a href="/auth/login" class="btn variant-filled-secondary">
                         Sign Up
-                    </Button>
+					</a>
 				</div>
 			</div>
 		</div>

@@ -1,0 +1,1 @@
+<h2 class="h2 font-semibold">New Group</h2>

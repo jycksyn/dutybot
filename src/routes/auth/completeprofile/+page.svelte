@@ -1,11 +1,10 @@
 <script lang="ts">
 	import Gravatar from '$lib/components/Gravatar.svelte';
-	import Button from '$lib/components/ui/Button.svelte';
+	import TextField from '$lib/components/ui/TextField.svelte';
+	import { userInfoSchema } from '$lib/forms';
 	import { superForm } from 'sveltekit-superforms/client';
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 	import type { PageData } from './$types';
-	import { userInfoSchema } from '$lib/forms';
-	import TextField from '$lib/components/ui/TextField.svelte';
 
 	export let data: PageData;
 
@@ -28,7 +27,7 @@
 		<TextField {form} field="email" class="col-span-3" />
 	</div>
 
-	<Button disabled={!!$allErrors.length} intent="secondary">Submit</Button>
+	<button disabled={!!$allErrors.length} class="btn variant-filled-secondary">Submit</button>
 	{#if $message}
 		<small class="text-red-600">{$message}</small>
 	{/if}

@@ -46,7 +46,10 @@ export const GET: RequestHandler = async ({ cookies, url, locals }) => {
         });
     }
 
+    console.log({user});
+
     if (!user) {
+        console.log("no user");
         const params = new URLSearchParams(omitBy({
             name: providerUser.name,
             email: providerUser.email
