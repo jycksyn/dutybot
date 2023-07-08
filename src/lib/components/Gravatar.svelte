@@ -3,15 +3,12 @@
 	import md5 from 'md5';
 	import type { ComponentProps } from "svelte";
 
-    type GravatarProps = {
-        email: String
+    interface $$Props extends ComponentProps<Avatar> {
+        class?: String,
+        email: string | null | undefined
     };
 
-    interface $$Props extends GravatarProps, ComponentProps<Avatar> {
-        class?: String
-    };
-
-    export let email: String;
+    export let email: $$Props['email'] = "";
 
     $: src = email ? `https://www.gravatar.com/avatar/${md5(email.trim().toLowerCase())}` : "";
 </script>

@@ -9,13 +9,15 @@
 
 	export let form: SuperForm<ZodValidation<T>, unknown>;
 	export let field: FormPathLeaves<z.infer<T>>;
+  export let placeholder: string = '';
 
 	const { value, errors, constraints } = formFieldProxy(form, field);
 </script>
 
 <label class={cva('label flex flex-col items-stretch')({ class: $$restProps.class })}>
-    <span>{field}</span>
+    <span class="capitalize">{field}</span>
     <input
+      {placeholder}
       name={field}
       type="text"
       aria-invalid={$errors ? 'true' : undefined}

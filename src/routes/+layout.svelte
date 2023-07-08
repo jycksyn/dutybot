@@ -13,9 +13,9 @@
 	// Finally, your application's global stylesheet (sometimes labeled 'app.css')
 	// import '../app.postcss';
 
-	export let data;
-
-	setContext('seed', data.seed);
+	import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom';
+	import { storePopup } from '@skeletonlabs/skeleton';
+	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 </script>
 
 <Modal />

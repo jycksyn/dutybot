@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
@@ -59,17 +60,14 @@ model User {
 model Group {
   id            String        @id @unique @default(uuid())
   name          String
+  emoji         String
   members       GroupMember[] @relation("members")
-  owner_id      String        @unique
-  owner         GroupMember   @relation("owner", references: [id], fields: [owner_id])
   sessions      Session[]
 }
 
 model GroupMember {
-  id            String    @id @unique @default(uuid())
   group_id      String
   group         Group     @relation("members", references: [id], fields: [group_id])
-  ownedGroup    Group?    @relation("owner")
   user_id       String    
   user          User      @relation(references: [id], fields: [user_id])
   is_admin      Boolean   @default(false)
@@ -78,7 +76,7 @@ model GroupMember {
   responses     Response[]
   shifts        ShiftAssignment[]
 
-  @@unique([group_id, user_id])
+  @@id([group_id, user_id])
 	@@map("GroupMembers")
 }
 
@@ -109,7 +107,8 @@ model Response {
   session_id    String
   session       Session     @relation(fields: [session_id], references: [id])
   respondent_id String
-  respondent    GroupMember @relation(fields: [respondent_id], references: [id])
+  group_id      String
+  respondent    GroupMember @relation(fields: [group_id, respondent_id], references: [group_id, user_id])
   preferences   Preference[]
 }
 
@@ -172,8 +171,9 @@ model DutyCalendar {
 model ShiftAssignment {
   cal_id        String
   calendar      DutyCalendar  @relation(fields: [cal_id], references: [id])
-  member_id     String
-  member        GroupMember   @relation(fields: [member_id], references: [id])
+  user_id       String
+  group_id      String
+  member        GroupMember   @relation(fields: [user_id, group_id], references: [user_id, group_id])
   shift_id      String
   shift         Shift         @relation(fields: [shift_id], references: [id])
   assigned      ShiftAssigned @default(AUTOMATICALLY)
