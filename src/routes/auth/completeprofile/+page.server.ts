@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ url, locals }) => {
 }
 
 export const actions: Actions = {
-    default: async ({ request, locals }) => {
+    default: async ({ request, locals, url }) => {
         const { user } = await locals.auth.validateUser();
         if (!user) throw redirect(302, '/auth/login');
 
@@ -46,6 +46,8 @@ export const actions: Actions = {
             return message(form, "There was an unknown error", {status: 403});
         }
 
-        throw redirect(302, '/dashboard');
+        const redirectURI = url.searchParams.get('redirect');
+
+        throw redirect(302, redirectURI ?? '/dashboard');
     }
 }

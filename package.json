@@ -44,13 +44,13 @@
 		"@floating-ui/dom": "^1.4.3",
 		"@lucia-auth/adapter-prisma": "^2.0.0",
 		"@lucia-auth/oauth": "^1.2.1",
-		"@prisma/client": "^4.16.1",
+		"@prisma/client": "^4.16.2",
 		"@steeze-ui/heroicons": "^2.2.2",
 		"@steeze-ui/svelte-icon": "^1.4.1",
 		"class-variance-authority": "^0.6.0",
 		"lodash": "^4.17.21",
 		"lucia-auth": "^1.8.0",
-		"prisma": "^4.16.1",
+		"prisma": "^4.16.2",
 		"seedrandom": "^3.0.5"
 	}
 }

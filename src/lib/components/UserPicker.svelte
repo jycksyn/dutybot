@@ -37,7 +37,8 @@
 		constraints
 	} = superForm<typeof searchUsersSchema, UserSearchResult>(data.userSearchForm, {
 		validators: searchUsersSchema,
-		dataType: 'json'
+		dataType: 'json',
+		invalidateAll: false
 	});
 
 	const userListPopup: PopupSettings = {
@@ -107,12 +108,7 @@
 	const removeMember = (i: number) => {
 		const members = [...$parent.members];
 		members.splice(i, 1);
-		try {
-			membersSchema.parse(members);
-			$parent.members = members;
-		} catch (e) {
-			return;
-		}
+		$parent.members = members;
 	};
 </script>
 
@@ -137,7 +133,7 @@
 <dl class="list-dl">
 	{#each $parent.members as member, i (member.email)}
 		<div
-			class="p-4 ring-warning-600-300-token flex-wrap gap-4 [&>*]:!m-0"
+			class="p-4 flex-wrap gap-4 [&>*]:!m-0"
 		>
 			<Gravatar email={member.email} />
 			<span class="flex-auto">
@@ -153,7 +149,7 @@
 				>
 					<Icon class="h-4 mr-2" src={ChatBubbleBottomCenterText} />
 					Respondent
-					<input name="roles" required type="checkbox" class="hidden" bind:checked={member.is_respondent} />
+					<input type="checkbox" class="hidden" bind:checked={$parent.members[i].is_respondent} />
 				</label>
 				<label
 					class="btn btn-sm -mr-4"
@@ -162,7 +158,7 @@
 				>
 					<Icon class="h-4 mr-2" src={Star} />
 					Admin
-					<input disabled={member.user_id == user.id} name="roles" required type="checkbox" class="hidden" bind:checked={$parent.members[i].is_admin} />
+					<input type="checkbox" disabled={member.user_id == user.id} class="hidden" bind:checked={$parent.members[i].is_admin} />
 				</label>
 			</div>
 			{#if member.user_id != user.id}
