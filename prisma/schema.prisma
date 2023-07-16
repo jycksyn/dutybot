@@ -47,7 +47,7 @@ model AuthKey {
 
 model User {
   id            String      @id @unique
-  auth_user     AuthUser    @relation(fields: [id], references: [id])
+  auth_user     AuthUser    @relation(fields: [id], references: [id], onDelete: Cascade)
   email         String?     @unique
   name          String? 
   joined        DateTime    @default(now())
@@ -58,18 +58,19 @@ model User {
 }
 
 model Group {
-  id            String        @id @unique @default(uuid())
+  id            String        @id @unique @default(cuid())
   name          String
   emoji         String
   members       GroupMember[] @relation("members")
   sessions      Session[]
+  updatedAt     DateTime      @updatedAt @default(now())
 }
 
 model GroupMember {
   group_id      String
-  group         Group     @relation("members", references: [id], fields: [group_id])
+  group         Group     @relation("members", references: [id], fields: [group_id], onDelete: Cascade)
   user_id       String    
-  user          User      @relation(references: [id], fields: [user_id])
+  user          User      @relation(references: [id], fields: [user_id], onDelete: Cascade)
   is_admin      Boolean   @default(false)
   is_respondent Boolean   @default(false)
   nickname      String?
@@ -81,9 +82,9 @@ model GroupMember {
 }
 
 model Session {
-  id            String         @id @unique @default(uuid())
+  id            String         @id @unique @default(cuid())
   group_id      String
-  group         Group          @relation(fields: [group_id], references: [id])
+  group         Group          @relation(fields: [group_id], references: [id], onDelete: Cascade)
   start         DateTime       @db.Date
   end           DateTime       @db.Date
   responses     Response[]
@@ -102,13 +103,13 @@ enum SessionStatus {
 }
 
 model Response {
-  id            String      @id @unique @default(uuid())
+  id            String      @id @unique @default(cuid())
   timestamp     DateTime    @default(now())
   session_id    String
-  session       Session     @relation(fields: [session_id], references: [id])
+  session       Session     @relation(fields: [session_id], references: [id], onDelete: Cascade)
   respondent_id String
   group_id      String
-  respondent    GroupMember @relation(fields: [group_id, respondent_id], references: [group_id, user_id])
+  respondent    GroupMember @relation(fields: [group_id, respondent_id], references: [group_id, user_id], onDelete: Cascade)
   preferences   Preference[]
 }
 
@@ -123,7 +124,7 @@ model Preference {
 }
 
 model ShiftType {
-  id            String      @id @unique @default(uuid())
+  id            String      @id @unique @default(cuid())
   session_id    String
   session       Session     @relation(fields: [session_id], references: [id])
   start_date    DateTime    @db.Date
@@ -151,7 +152,7 @@ model ShiftTypeRepeat {
 }
 
 model Shift {
-  id            String      @id @unique @default(uuid())
+  id            String      @id @unique @default(cuid())
   type_id       String
   type          ShiftType   @relation(fields: [type_id], references: [id])
   date          DateTime    @db.Date
@@ -160,7 +161,7 @@ model Shift {
 }
 
 model DutyCalendar {
-  id            String            @id @unique @default(uuid())
+  id            String            @id @unique @default(cuid())
   session_id    String
   session       Session           @relation("all_calendars", fields: [session_id], references: [id])
   final_for     Session?          @relation("final_calendar")

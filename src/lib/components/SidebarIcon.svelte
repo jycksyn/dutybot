@@ -7,11 +7,11 @@
 
     export let icon: IconSource;
     export let href: string;
-
-    $: selected = $page.url.pathname.slice(0, href.length) === href;
 </script>
 
-<AppRailAnchor {href} {selected}>
+<AppRailAnchor 
+    {href} 
+    selected={$page.url.pathname.slice(0, href.length) === href}>
     <svelte:fragment slot="lead">
         <Icon class="h-6" src={icon} />
     </svelte:fragment>

@@ -2,6 +2,8 @@
 	import SidebarIcon from '$lib/components/SidebarIcon.svelte';
 	import { AppRail, AppShell } from '@skeletonlabs/skeleton';
 	import { Calendar, User, UserGroup } from '@steeze-ui/heroicons';
+
+	
 </script>
 
 <AppShell>
