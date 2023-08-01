@@ -9,22 +9,23 @@ export type UserSearchResult = {
 }
 
 const usersearch: Action = async ({request}) => {
-    const searchForm = await superValidate<typeof searchUsersSchema, UserSearchResult>(request, searchUsersSchema);
+    const userSearchForm = await superValidate<typeof searchUsersSchema, UserSearchResult>(request, searchUsersSchema);
 
-    const { email } = searchForm.data;
+    const { email } = userSearchForm.data;
 
     console.log({email})
 
-    if (!searchForm.valid) return fail(400, { searchForm });
+    if (!userSearchForm.valid) return fail(400, { userSearchForm });
 
     try {
         const user = await db.user.findUnique({
             where: {email}
         });
 
-        return message(searchForm, {user});
+        return message(userSearchForm, {user});
     } catch (e) {
         console.error(e);
+        return fail(500, {userSearchForm});
     }
 }
 

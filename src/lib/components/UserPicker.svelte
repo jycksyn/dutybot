@@ -24,6 +24,7 @@
 	} from '@steeze-ui/heroicons';
 
 	import { Icon } from '@steeze-ui/svelte-icon';
+	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 
 	export let data: ContainsUserSearchForm;
 	$: user = data.user;
@@ -49,7 +50,7 @@
 
 	let ref: HTMLFormElement;
 	let timeout: number;
-	let waiting: boolean;
+	let waiting: boolean = false;
 
 	const submitForm = () => {
 		waiting = false;
@@ -179,13 +180,13 @@
 	<div class="card z-10 p-2 w-full -mt-2 flex flex-column items-center" data-popup="userListPopup">
 		{#if $errors?.email !== undefined || $values?.email == ''}
 			<div class="p-2 text-error-600">{$errors?.email ?? 'Please enter an email'}</div>
-		{:else if $delayed || waiting || !$result}
+		{:else if $delayed || waiting}
 			<div class="placeholder h-10" />
-		{:else if $result.user?.email == $values.email}
+		{:else if $result?.user?.email == $values.email}
 			<ul class="list">
 				<li>
 					<button type="button" on:click={addMember} class="list-option text-left w-full">
-						<span><Gravatar class="h-10 w-10" email={$result.user.email} /></span>
+						<span><Gravatar class="h-10" width="w-10" email={$result.user.email} /></span>
 						<div class="flex-auto flex flex-col">
 							<span class="text-md">{$result.user.name}</span>
 							<span class="text-sm text-gray-500">{$result.user.email}</span>
@@ -193,7 +194,7 @@
 					</button>
 				</li>
 			</ul>
-		{:else if !$result.user}
+		{:else if !$result?.user}
 			<div class="p-2 text-gray-600">No results found.</div>
 		{/if}
 	</div>

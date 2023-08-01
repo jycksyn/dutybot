@@ -48,11 +48,12 @@ export const actions: Actions = {
         if (!form.valid)
             return fail(400, {form});
 
-        const {name, emoji, members} = form.data;
+        const {name, emoji, members, timezone} = form.data;
         
         try {
             var group = await db.group.create({
                 data: {
+                    timezone,
                     name, emoji,
                     members: {
                         create: members.map(({user_id, is_admin, is_respondent}) => ({

@@ -31,7 +31,8 @@ export const membersSchema = memberSchema
 export const groupSchema = z.object({
     name: z.string().min(1),
     emoji: z.string().emoji(),
-    members: membersSchema
+    members: membersSchema,
+    timezone: z.string()
 });
 
 export const membersUpdateSchema = z.object({

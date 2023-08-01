@@ -6,8 +6,12 @@
 	import { groupSchema } from '$lib/forms';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { PageData } from './$types';
+	import dayjs from 'dayjs';
+	import timezone from 'dayjs/plugin/timezone';
 
-	export let data: PageData;
+	dayjs.extend(timezone);
+
+	export let data;
 
 	const groupForm = superForm(data.groupForm, {
 		validators: groupSchema,
@@ -35,6 +39,7 @@
 	<TextField form={groupForm} field="name" placeholder="Choose a name for the group" />
 	<TextField form={groupForm} field="emoji" />
     <UserPicker form={groupForm} {data} />
+	<input name="timezone" hidden value={dayjs.tz.guess()} />
     <button type="submit" disabled={!!$allErrors?.length} class="btn variant-filled-secondary">Submit</button>
 </form>
 
