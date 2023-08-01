@@ -63,7 +63,9 @@ model Group {
   emoji         String
   members       GroupMember[] @relation("members")
   sessions      Session[]
+  shiftTypes    ShiftType[]
   updatedAt     DateTime      @updatedAt @default(now())
+  timezone      String
 }
 
 model GroupMember {
@@ -89,17 +91,11 @@ model Session {
   end           DateTime       @db.Date
   responses     Response[]
   shift_types   ShiftType[]
+  shifts        Shift[]
   calendars     DutyCalendar[] @relation("all_calendars")
   final_cal_id  String?        @unique
   final_cal     DutyCalendar?  @relation("final_calendar", fields: [final_cal_id], references: [id])
-  status        SessionStatus
-}
-
-enum SessionStatus {
-  HIDDEN
-  CLOSED
-  OPEN_FOR_RESPONSES
-  CALENDAR_PUBLISHED
+  dueDate       DateTime?
 }
 
 model Response {
@@ -125,15 +121,17 @@ model Preference {
 
 model ShiftType {
   id            String      @id @unique @default(cuid())
-  session_id    String
-  session       Session     @relation(fields: [session_id], references: [id])
-  start_date    DateTime    @db.Date
-  end_date      DateTime    @db.Date
+  name          String
+  group_id      String
+  group         Group       @relation(fields: [group_id], references: [id])
+  start_date    DateTime?   @db.Date
+  end_date      DateTime?   @db.Date
   repeat        Repeat
   start_time    DateTime    @db.Time
   end_time      DateTime    @db.Time
   shifts        Shift[]
   repeat_days   ShiftTypeRepeat[]
+  sessions      Session[]
 }
 
 enum Repeat {
@@ -155,6 +153,8 @@ model Shift {
   id            String      @id @unique @default(cuid())
   type_id       String
   type          ShiftType   @relation(fields: [type_id], references: [id])
+  session_id    String      
+  session       Session     @relation(fields: [session_id], references: [id])
   date          DateTime    @db.Date
   preferences   Preference[]
   assigned_to   ShiftAssignment[]

@@ -18,10 +18,12 @@
 	<SidebarIcon slot="trail" icon={User} href="/dashboard/user" />
 </AppRail>
 
+<div class="max-h-screen">
 <div class="max-w-2xl m-auto">
 <main class="p-6">
 <slot />
 </main>
+</div>
 </div>
 
 </AppShell>

@@ -10,6 +10,7 @@
 	const SUBPAGES = [
 		['Sessions', `/dashboard/group/${group.id}/sessions`],
 		['Members', `/dashboard/group/${group.id}/members`],
+		['Shift Types', `/dashboard/group/${group.id}/shifttypes`],
 	]
 </script>
 
@@ -27,3 +28,5 @@
 		</TabAnchor>
 	{/each}
 </TabGroup>
+
+<slot />

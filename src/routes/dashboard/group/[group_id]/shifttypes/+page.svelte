@@ -1,0 +1,54 @@
+<script lang="ts">
+	import { invalidate, invalidateAll } from '$app/navigation';
+	import ModalNewShiftType from '$lib/components/ModalNewShiftType.svelte';
+	import { prettyTime } from '$lib/dates.js';
+	import { shiftTypeSchema } from '$lib/forms.js';
+	import { modalStore } from '@skeletonlabs/skeleton';
+	import { Plus } from '@steeze-ui/heroicons';
+	import { Icon } from '@steeze-ui/svelte-icon';
+	import { superForm } from 'sveltekit-superforms/client';
+
+	export let data;
+
+	const shiftTypeForm = superForm(data.shiftTypeForm, {
+		validators: shiftTypeSchema,
+        invalidateAll: true,
+        async onUpdated({form}) {
+            if (form.valid) {
+                modalStore.clear();
+            }
+        },
+	});
+
+	$:( {types, group} = data);
+
+	const openNewSession = () => {
+		modalStore.trigger({
+			type: 'component',
+			component: {
+				ref: ModalNewShiftType,
+				props: {
+					shiftTypeForm
+				}
+			}
+		});
+	};
+</script>
+
+<ul class="list m-8 flex flex-col gap-2">
+	{#each types as type (type.id)}
+		<li>
+			<div class="flex flex-col flex-auto">
+				<span class="text-lg">{type.name}</span>
+				<span class="text-sm">{prettyTime(type.start_time)} - {prettyTime(type.end_time)}</span>
+			</div>
+		</li>
+	{/each}
+</ul>
+
+<button on:click={openNewSession} class="btn bg-initial text-primary-500-400-token w-full">
+    <span class="flex flex-row justify-center items-center">
+	<Icon src={Plus} class="h-4" />
+    New Shift Type
+</span>
+</button>

@@ -17,13 +17,12 @@
 </header>
 
 <ul class="list m-8 flex flex-col gap-2">
-	{#each memberOf as member (member.group.id)}
-		{@const group = member.group}
+	{#each memberOf as {group, is_admin} (group.id)}
 		<li>
 			<Avatar width="w-14" initials={group.emoji} />
 			<div class="flex flex-col flex-auto">
 				<span class="text-lg">{group.name}</span>
-				{#if member.is_admin}
+				{#if is_admin}
 				<span class="flex flex-row items-center text-secondary-600-300-token"
 					>
 					<Icon src={Star} class="fill-current h-4 w-4 mr-1" />

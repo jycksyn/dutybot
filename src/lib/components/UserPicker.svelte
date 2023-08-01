@@ -2,7 +2,7 @@
 	import { membersSchema, searchUsersSchema } from '$lib/forms';
 	import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
 	import { superForm, type SuperForm } from 'sveltekit-superforms/client';
-	import type { SuperValidated, ZodValidation } from 'sveltekit-superforms/index';
+	import type { SuperValidated, ZodValidation } from 'sveltekit-superforms';
 	import { z } from 'zod';
 	import Gravatar from './Gravatar.svelte';
 
