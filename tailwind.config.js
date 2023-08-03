@@ -9,6 +9,9 @@ export default {
       '../**/*.{html,js,svelte,ts}'
     )
   ],
+  safelist: [{
+    pattern: /col-start/
+  }],
   theme: {
     // colors: {
     //   primary: colors.purple,
