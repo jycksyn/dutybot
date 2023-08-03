@@ -14,7 +14,7 @@
 		invalidateAll: false
 	});
 
-	const {sessions} = data;
+	$: ({ sessions, is_admin } = data);
 
 	const openNewSession = () => {
 		modalStore.trigger({
@@ -43,9 +43,11 @@
 	{/each}
 </ul>
 
-<button on:click={openNewSession} class="btn bg-initial text-primary-500-400-token w-full">
-    <span class="flex flex-row justify-center items-center">
-	<Icon src={Plus} class="h-4" />
-    New Session
-</span>
-</button>
+{#if is_admin}
+	<button on:click={openNewSession} class="btn bg-initial text-primary-500-400-token w-full">
+		<span class="flex flex-row justify-center items-center">
+			<Icon src={Plus} class="h-4" />
+			New Session
+		</span>
+	</button>
+{/if}

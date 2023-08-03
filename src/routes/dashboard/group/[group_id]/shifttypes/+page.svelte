@@ -12,15 +12,15 @@
 
 	const shiftTypeForm = superForm(data.shiftTypeForm, {
 		validators: shiftTypeSchema,
-        invalidateAll: true,
-        async onUpdated({form}) {
-            if (form.valid) {
-                modalStore.clear();
-            }
-        },
+		invalidateAll: true,
+		async onUpdated({ form }) {
+			if (form.valid) {
+				modalStore.clear();
+			}
+		}
 	});
 
-	$:( {types, group} = data);
+	$: ({ types, group, is_admin } = data);
 
 	const openNewSession = () => {
 		modalStore.trigger({
@@ -46,9 +46,11 @@
 	{/each}
 </ul>
 
-<button on:click={openNewSession} class="btn bg-initial text-primary-500-400-token w-full">
-    <span class="flex flex-row justify-center items-center">
-	<Icon src={Plus} class="h-4" />
-    New Shift Type
-</span>
-</button>
+{#if is_admin}
+	<button on:click={openNewSession} class="btn bg-initial text-primary-500-400-token w-full">
+		<span class="flex flex-row justify-center items-center">
+			<Icon src={Plus} class="h-4" />
+			New Shift Type
+		</span>
+	</button>
+{/if}

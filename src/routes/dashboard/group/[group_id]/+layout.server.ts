@@ -34,5 +34,5 @@ export const load: LayoutServerLoad = async ({ locals, params }) => {
         throw redirect(303, '/auth/completeprofile?' + params);
     }
 
-    return { user: member.user, group: member.group };
+    return { ...member };
 };
