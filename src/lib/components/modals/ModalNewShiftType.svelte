@@ -3,7 +3,7 @@
 	import { modalStore } from '@skeletonlabs/skeleton';
 	import type { SuperForm } from 'sveltekit-superforms/client';
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
-	import TextField from './ui/TextField.svelte';
+	import TextField from '../ui/TextField.svelte';
 	import { Repeat } from '@prisma/client';
 	import { repeat } from 'lodash';
 	import dayjs from 'dayjs';
