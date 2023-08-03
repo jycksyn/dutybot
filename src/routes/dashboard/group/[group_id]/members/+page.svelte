@@ -43,7 +43,7 @@
 	<a href="./members/edit" class="btn bg-initial text-primary-500-400-token w-full">
 		<span class="flex flex-row justify-center items-center">
 			<Icon src={Pencil} class="h-4" />
-			New Shift Type
+			Edit Members
 		</span>
 	</a>
 {/if}

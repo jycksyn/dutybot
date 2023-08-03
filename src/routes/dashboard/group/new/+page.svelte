@@ -8,6 +8,8 @@
 	import type { PageData } from './$types';
 	import dayjs from 'dayjs';
 	import timezone from 'dayjs/plugin/timezone';
+	import SuperDebug from "sveltekit-superforms/client/SuperDebug.svelte";
+	import { onMount } from "svelte";
 
 	dayjs.extend(timezone);
 
@@ -21,8 +23,11 @@
 	const { 
 		enhance, 
 		allErrors, 
-		message
+		message,
+		form
 	} = groupForm;
+
+	onMount(() => $form.timezone = dayjs.tz.guess())
 </script>
 
 <header class="flex flex-row justify-start mb-4">
@@ -39,7 +44,7 @@
 	<TextField form={groupForm} field="name" placeholder="Choose a name for the group" />
 	<TextField form={groupForm} field="emoji" />
     <UserPicker form={groupForm} {data} />
-	<input name="timezone" hidden value={dayjs.tz.guess()} />
+	<input name="timezone" hidden bind:value={$form.timezone} />
     <button type="submit" disabled={!!$allErrors?.length} class="btn variant-filled-secondary">Submit</button>
 </form>
 
