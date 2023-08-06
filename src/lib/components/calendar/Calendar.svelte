@@ -26,7 +26,7 @@
 			{@const date = start.add(i, 'day')}
 			{@const day = date.day()}
 			<li class="{i == 0 ? `col-start-${day + 1} ` : ''}flex items-center justify-center list-none">
-				<DayWrapper shifts={shifts.filter((d) => dayjs(d.date).isSame(date, 'date'))} />
+				<DayWrapper {date} shifts={shifts.filter((d) => dayjs(d.date).isSame(date, 'date'))} />
 			</li>
 		{/each}
 	</ol>
