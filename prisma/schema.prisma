@@ -87,8 +87,8 @@ model Session {
   id            String         @id @unique @default(cuid())
   group_id      String
   group         Group          @relation(fields: [group_id], references: [id], onDelete: Cascade)
-  start         DateTime       @db.Date
-  end           DateTime       @db.Date
+  start         DateTime
+  end           DateTime
   responses     Response[]
   shift_types   ShiftType[]
   shifts        Shift[]
@@ -124,8 +124,8 @@ model ShiftType {
   name          String
   group_id      String
   group         Group       @relation(fields: [group_id], references: [id])
-  start_date    DateTime?   @db.Date
-  end_date      DateTime?   @db.Date
+  start_date    DateTime?
+  end_date      DateTime?
   repeat        Repeat
   start_time    DateTime    @db.Time
   end_time      DateTime    @db.Time
@@ -155,7 +155,9 @@ model Shift {
   type          ShiftType   @relation(fields: [type_id], references: [id])
   session_id    String      
   session       Session     @relation(fields: [session_id], references: [id])
-  date          DateTime    @db.Date
+  date          DateTime
+  start         DateTime
+  end           DateTime
   preferences   Preference[]
   assigned_to   ShiftAssignment[]
 }

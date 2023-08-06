@@ -64,8 +64,8 @@ export const actions: Actions = {
             var session = await db.session.create({
                 data: {
                     group_id: member.group.id,
-                    start: dayjs.tz(start, timezone).toDate(),
-                    end: dayjs.tz(end, timezone).toDate(),
+                    start: dayjs.tz(start, timezone).hour(0).minute(0).toDate(),
+                    end: dayjs.tz(end, timezone).hour(0).minute(0).toDate(),
                 },
             });
         } catch (e) {

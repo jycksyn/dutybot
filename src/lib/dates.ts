@@ -16,7 +16,8 @@ dayjs.extend(isSameOrAfter);
 
 export default dayjs;
 
-export const prettyDate = (date: Parameters<typeof dayjs>[0], timezone: string | undefined = undefined) => dayjs.tz(date, timezone).format('MMMM DD, YYYY');
-export const prettyTime = (time: Parameters<typeof dayjs>[0]) => dayjs.utc(time).format('LT');
+export const prettyDate = (date: Parameters<typeof dayjs>[0], timezone: string | undefined = undefined) => dayjs.tz(date, timezone).format('MMMM D, YYYY');
+export const prettyAbstractTime = (time: Parameters<typeof dayjs>[0]) => dayjs.utc(time).format('LT');
+export const prettyTime = (time: Parameters<typeof dayjs>[0]) => dayjs(time).format('LT');
 
 export const sessionName = (session: Session, timezone: string | undefined = undefined) => `${prettyDate(session.start, timezone)} - ${prettyDate(session.end, timezone)}`;

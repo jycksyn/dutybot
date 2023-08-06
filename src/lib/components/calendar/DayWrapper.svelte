@@ -14,10 +14,9 @@
         <div class="card bg-surface-300-600-token text-sm p-1">
             <p>
                 <span class="font-bold">
-                    {dayjs(shift.date).date()}
-                </span> {shift.type.name}
+                    {dayjs(shift.date).date()}</span> {shift.type.name}
             </p>
-            <p>{prettyTime(shift.type.start_time)} - {prettyTime(shift.type.end_time)}</p>
+            <p>{prettyTime(shift.start)} - {prettyTime(shift.end)}</p>
         </div>
     {/each}
 </div>

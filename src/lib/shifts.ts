@@ -35,13 +35,18 @@ export const generateShifts = (start: Dayjs, end: Dayjs, shiftTypes: (ShiftType 
                     break;
                 default:
                     var occurs = date.isSame(type.start_date, 'date');
-                    break;
             }
+
+            const offset = (dayjs(type.end_time).isBefore(type.start_time)) ? 0 : 1000 * 60 * 60 * 24;
+            const start = dayjs(date.valueOf() + dayjs.utc(type.start_time).valueOf()).toDate();
+            const end = dayjs(date.valueOf() + dayjs.utc(type.end_time).valueOf() + offset).toDate();
 
             if (in_range && occurs) {
                 shifts.push({
                     type_id: type.id,
-                    date: date.toDate()
+                    date: date.toDate(),
+                    start,
+                    end
                 });
             }
         }

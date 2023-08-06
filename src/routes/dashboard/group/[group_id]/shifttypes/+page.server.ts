@@ -76,8 +76,8 @@ export const actions: Actions = {
                     end_time: dayjs.utc(end_time, "HH:mm").toDate(),
                     name,
                     repeat,
-                    start_date: dayjs.tz(start_date, member.group.timezone).toDate(),
-                    end_date: dayjs.tz(end_date, member.group.timezone).toDate(),
+                    start_date: start_date ? dayjs.tz(start_date, member.group.timezone).toDate() : undefined,
+                    end_date: end_date ? dayjs.tz(end_date, member.group.timezone).toDate() : undefined,
                     repeat_days: {
                         create: days
                     }

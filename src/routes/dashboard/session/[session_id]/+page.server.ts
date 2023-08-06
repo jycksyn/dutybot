@@ -6,8 +6,11 @@ import { db } from "$lib/server/db";
 import { generateShifts } from "$lib/shifts";
 import dayjs from "$lib/dates";
 
-export const load: PageServerLoad = async () => {
-    const selectShiftTypesForm = await superValidate(selectShiftTypesSchema);
+export const load: PageServerLoad = async ({parent}) => {
+    const {session} = await parent();
+    const selectShiftTypesForm = await superValidate({
+        types: session.shift_types.map(x => x.id)
+    }, selectShiftTypesSchema);
 
     return {selectShiftTypesForm};
 }
