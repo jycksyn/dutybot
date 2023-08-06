@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { invalidate, invalidateAll } from '$app/navigation';
-	import ModalNewShiftType from '$lib/components/ModalNewShiftType.svelte';
-	import { prettyTime } from '$lib/dates.js';
+	import ModalNewShiftType from '$lib/components/modals/ModalNewShiftType.svelte';
+	import { prettyAbstractTime, prettyTime } from '$lib/dates.js';
 	import { shiftTypeSchema } from '$lib/forms.js';
 	import { modalStore } from '@skeletonlabs/skeleton';
 	import { Plus } from '@steeze-ui/heroicons';
@@ -41,7 +41,7 @@
 			<li>
 				<div class="flex flex-col flex-auto">
 					<span class="text-lg">{type.name}</span>
-					<span class="text-sm">{prettyTime(type.start_time)} - {prettyTime(type.end_time)}</span>
+					<span class="text-sm">{prettyAbstractTime(type.start_time)} - {prettyAbstractTime(type.end_time)}</span>
 				</div>
 			</li>
 		{/each}

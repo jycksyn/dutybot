@@ -4,14 +4,7 @@ import { fail, redirect } from "@sveltejs/kit";
 import { message, superValidate } from "sveltekit-superforms/client";
 import type { Actions, PageServerLoad } from "./$types";
 import { Repeat } from "@prisma/client";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
-
-dayjs.extend(customParseFormat);
-dayjs.extend(utc);
-dayjs.extend(timezone);
+import dayjs from "$lib/dates";
 
 export const load: PageServerLoad = async ({locals, params}) => {
     const {user: authUser} = await locals.auth.validateUser();
@@ -83,8 +76,8 @@ export const actions: Actions = {
                     end_time: dayjs.utc(end_time, "HH:mm").toDate(),
                     name,
                     repeat,
-                    start_date,
-                    end_date,
+                    start_date: start_date ? dayjs.tz(start_date, member.group.timezone).toDate() : undefined,
+                    end_date: end_date ? dayjs.tz(end_date, member.group.timezone).toDate() : undefined,
                     repeat_days: {
                         create: days
                     }

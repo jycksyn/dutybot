@@ -1,8 +1,7 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import BackButton from '$lib/components/BackButton.svelte';
-	import { TabGroup, TabAnchor } from '@skeletonlabs/skeleton';
-	import { Icon } from '@steeze-ui/svelte-icon';
-	import {page} from '$app/stores';
+	import { TabAnchor, TabGroup } from '@skeletonlabs/skeleton';
 
     export let data;
     const {user, group} = data;

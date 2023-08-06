@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ModalNewSession from '$lib/components/ModalNewSession.svelte';
+	import ModalNewSession from '$lib/components/modals/ModalNewSession.svelte';
 	import { sessionName } from '$lib/dates.js';
 	import { newSessionSchema } from '$lib/forms.js';
 	import { modalStore } from '@skeletonlabs/skeleton';
