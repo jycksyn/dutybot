@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ModalSignOut from '$lib/components/ModalSignOut.svelte';
+	import ModalSignOut from '$lib/components/modals/ModalSignOut.svelte';
 	import { modalStore } from '@skeletonlabs/skeleton';
 
 	const openSignOut = () => {

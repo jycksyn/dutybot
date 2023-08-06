@@ -3,6 +3,8 @@ import { db } from "$lib/server/db";
 import { fail, redirect } from "@sveltejs/kit";
 import { message, superValidate } from "sveltekit-superforms/client";
 import type { Actions, PageServerLoad } from "./$types";
+import dayjs from "$lib/dates";
+import utc from "dayjs/plugin/utc";
 
 export const load: PageServerLoad = async ({locals, params}) => {
     const {user: authUser} = await locals.auth.validateUser();
@@ -38,7 +40,7 @@ export const actions: Actions = {
         console.log("POST", form);
 
         if (!form.valid)
-            return fail(400, {form});
+            return fail(400, {sessionForm: form});
 
         const member = await db.groupMember.findFirst({
             where: {
@@ -55,13 +57,15 @@ export const actions: Actions = {
             throw redirect(302, '/dashboard/group');
 
         const {start, end} = form.data;
+
+        const {timezone} = member.group;
         
         try {
             var session = await db.session.create({
                 data: {
                     group_id: member.group.id,
-                    start,
-                    end
+                    start: dayjs.tz(start, timezone).toDate(),
+                    end: dayjs.tz(end, timezone).toDate(),
                 },
             });
         } catch (e) {

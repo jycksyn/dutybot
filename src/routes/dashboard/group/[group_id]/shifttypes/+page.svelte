@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { invalidate, invalidateAll } from '$app/navigation';
-	import ModalNewShiftType from '$lib/components/ModalNewShiftType.svelte';
+	import ModalNewShiftType from '$lib/components/modals/ModalNewShiftType.svelte';
 	import { prettyTime } from '$lib/dates.js';
 	import { shiftTypeSchema } from '$lib/forms.js';
 	import { modalStore } from '@skeletonlabs/skeleton';

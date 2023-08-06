@@ -19,16 +19,25 @@ export const load: LayoutServerLoad = async ({ locals, params }) => {
             group: {
                 include: {
                     members: {
-                        where: {
-                            user_id: authUser.userId
+                        include: {
+                            user: true
                         }
-                    }
+                    },
+                    shiftTypes: true
+                }
+            },
+            shift_types: true,
+            shifts: {
+                include: {
+                    type: true
                 }
             }
         }
     });
 
     if (!session) throw error(404);
+    const currentMember = session.group.members.find(m => m.user_id == authUser.userId)
+    if (!currentMember) throw error(404);
 
-    return {session};
+    return {session, ...currentMember};
 };
