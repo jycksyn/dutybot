@@ -9,9 +9,12 @@
 
 	export let data;
 
-	const { session } = data;
+	const { session, is_admin } = data;
 
-	const SUBPAGES = [['Calendar', `/dashboard/session/${session.id}/calendar`]];
+	const SUBPAGES: [string, string, boolean][] = [
+		['Calendar', `/dashboard/session/${session.id}/calendar`, true],
+		['Settings', `/dashboard/session/${session.id}/settings`, is_admin],
+	];
 </script>
 
 <div class="flex flex-col gap-4">
@@ -31,7 +34,7 @@
 	</section>
 
 	<TabGroup justify="justify-center">
-		{#each SUBPAGES as [title, href]}
+		{#each SUBPAGES as [title, href, shouldRender]}
 			<TabAnchor {href} selected={$page.url.pathname.slice(0, href.length) === href}>
 				{title}
 			</TabAnchor>
