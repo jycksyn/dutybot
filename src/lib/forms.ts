@@ -67,3 +67,8 @@ export const shiftTypeSchema = z.object({
 }).refine(({repeat, repeat_days}) => (
     (repeat != Repeat.WEEKLY) || ((repeat_days?.length ?? 0) > 0)
 ), "Select at least one day to repeat weekly");
+
+export const dueDateSchema = z.object({
+    dueDate: z.coerce.date().nullable(),
+    openForResponses: z.boolean()
+});

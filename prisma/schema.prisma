@@ -84,18 +84,19 @@ model GroupMember {
 }
 
 model Session {
-  id            String         @id @unique @default(cuid())
-  group_id      String
-  group         Group          @relation(fields: [group_id], references: [id], onDelete: Cascade)
-  start         DateTime
-  end           DateTime
-  responses     Response[]
-  shift_types   ShiftType[]
-  shifts        Shift[]
-  calendars     DutyCalendar[] @relation("all_calendars")
-  final_cal_id  String?        @unique
-  final_cal     DutyCalendar?  @relation("final_calendar", fields: [final_cal_id], references: [id])
-  dueDate       DateTime?
+  id                String         @id @unique @default(cuid())
+  group_id          String
+  group             Group          @relation(fields: [group_id], references: [id], onDelete: Cascade)
+  start             DateTime
+  end               DateTime
+  responses         Response[]
+  shift_types       ShiftType[]
+  shifts            Shift[]
+  calendars         DutyCalendar[] @relation("all_calendars")
+  final_cal_id      String?        @unique
+  final_cal         DutyCalendar?  @relation("final_calendar", fields: [final_cal_id], references: [id])
+  dueDate           DateTime?
+  openForResponses  Boolean        @default(false)
 }
 
 model Response {
