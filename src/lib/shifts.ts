@@ -1,4 +1,4 @@
-import { Repeat, type Shift, type ShiftType, type ShiftTypeRepeat } from "@prisma/client";
+import { Repeat, type GroupMember, type Shift, type ShiftType, type ShiftTypeRepeat, type SessionConstraint, type SessionConstraintPayload } from "@prisma/client";
 import dayjs from "./dates";
 import { db } from "./server/db";
 
@@ -53,4 +53,22 @@ export const generateShifts = (start: Dayjs, end: Dayjs, shiftTypes: (ShiftType 
     }
 
     return shifts;
+}
+
+export const generateEveryoneConstraints = (types: ShiftType[], shifts: Omit<Shift, 'id' | 'session_id'>[], members: GroupMember[]) => {
+    const typeCount = new Map<string, number>();
+    for (let shift of shifts) {
+        const ct = typeCount.get(shift.type_id) ?? 0;
+        typeCount.set(shift.type_id, ct + 1);
+    }
+    const constraints: Omit<SessionConstraint, 'id' | 'session_id'>[] = types.map(type => {
+        const ratio = typeCount.get(type.id) ?? 0 / members.length;
+        return {
+            type_id: type.id,
+            everyone: true,
+            min: Math.floor(ratio),
+            max: Math.ceil(ratio),
+        }
+    });
+    return constraints;
 }
