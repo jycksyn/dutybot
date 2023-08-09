@@ -1,15 +1,12 @@
 <script lang="ts">
 	import dayjs, { prettyTime } from '$lib/dates';
-	import { Prisma, type Shift } from '@prisma/client';
+	import { Prisma } from '@prisma/client';
 	import { modalStore } from '@skeletonlabs/skeleton';
-	import ModalDays from '../modals/ModalDays.svelte';
 	import type { Dayjs } from 'dayjs';
+	import ModalDays from '../modals/ModalDays.svelte';
+	import type { ShiftWithType } from '$lib/dbtypes';
 
-	const shiftWithType = Prisma.validator<Prisma.ShiftArgs>()({
-		include: { type: true }
-	});
-
-	export let shifts: Prisma.ShiftGetPayload<typeof shiftWithType>[];
+	export let shifts: ShiftWithType[];
 	export let date: Dayjs;
 
 	const openModal = () => {

@@ -1,19 +1,11 @@
 <script lang="ts">
-	import type { newSessionSchema } from '$lib/forms';
+	import dayjs, { prettyDate, prettyTime } from '$lib/dates';
+	import type { ShiftWithType } from '$lib/dbtypes';
 	import { modalStore } from '@skeletonlabs/skeleton';
-	import type { SuperForm } from 'sveltekit-superforms/client';
-	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
-	import dayjs, { prettyTime } from '$lib/dates';
-	import { Prisma } from '@prisma/client';
-	import { prettyDate } from '$lib/dates';
 
 	type Dayjs = dayjs.Dayjs;
 
-	const shiftWithType = Prisma.validator<Prisma.ShiftArgs>()({
-		include: { type: true }
-	});
-
-	export let shifts: Prisma.ShiftGetPayload<typeof shiftWithType>[];
+	export let shifts: ShiftWithType[];
 	export let date: Dayjs;
 </script>
 
