@@ -6,6 +6,7 @@
 	import { modalStore } from "@skeletonlabs/skeleton";
 	import dayjs from "$lib/dates";
 	import { superForm } from "sveltekit-superforms/client";
+	import DisplayDay from "$lib/components/calendar/DisplayDay.svelte";
 
     export let data;
 
@@ -34,9 +35,6 @@
 			}
 		});
 	};
-
-    $: start = dayjs.tz(session.start, session.group.timezone);
-    $: end = dayjs.tz(session.end, session.group.timezone);
 </script>
 
 {#if is_admin}
@@ -47,4 +45,6 @@
 	</button>
 {/if}
 
-<Calendar {start} {end} shifts={session.shifts} />
+<Calendar let:date let:dayShifts shifts={session.shifts}>
+	<DisplayDay {date} shifts={dayShifts} />
+</Calendar>

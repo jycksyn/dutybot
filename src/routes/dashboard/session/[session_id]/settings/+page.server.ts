@@ -3,7 +3,7 @@ import { fail, redirect, type Actions } from "@sveltejs/kit";
 import { message, superValidate } from "sveltekit-superforms/client";
 import type { PageServerLoad } from "./$types";
 import { db } from "$lib/server/db";
-import { generateShifts } from "$lib/shifts";
+import { generateShifts } from "$lib/server/shifts";
 import dayjs from "$lib/dates";
 import { dueDateSchema } from "$lib/forms";
 

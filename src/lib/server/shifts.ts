@@ -1,6 +1,6 @@
 import { Repeat, type Shift, type ShiftType, type ShiftTypeRepeat } from "@prisma/client";
-import dayjs from "./dates";
-import { db } from "./server/db";
+import dayjs from "../dates";
+import { db } from "./db";
 
 type Dayjs = dayjs.Dayjs;
 
