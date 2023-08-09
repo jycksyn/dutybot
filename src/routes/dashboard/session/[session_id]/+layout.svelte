@@ -9,11 +9,12 @@
 
 	export let data;
 
-	const { session, is_admin } = data;
+	const { session, is_admin, is_respondent } = data;
 
 	const SUBPAGES: [string, string, boolean][] = [
 		['Calendar', `/dashboard/session/${session.id}/calendar`, true],
-		['Settings', `/dashboard/session/${session.id}/settings`, is_admin],
+		['Response', `/dashboard/session/${session.id}/response`, is_respondent],
+		['Settings', `/dashboard/session/${session.id}/settings`, is_admin]
 	];
 </script>
 
@@ -35,9 +36,11 @@
 
 	<TabGroup justify="justify-center">
 		{#each SUBPAGES as [title, href, shouldRender]}
-			<TabAnchor {href} selected={$page.url.pathname.slice(0, href.length) === href}>
-				{title}
-			</TabAnchor>
+			{#if shouldRender}
+				<TabAnchor {href} selected={$page.url.pathname.slice(0, href.length) === href}>
+					{title}
+				</TabAnchor>
+			{/if}
 		{/each}
 	</TabGroup>
 
