@@ -23,7 +23,7 @@ export const load: PageServerLoad = async ({parent, params}) => {
 
     const shiftRankingForm = await superValidate(
         {
-            preferences: new Map(preferences.map(({shift_id, ranking}) => [shift_id, ranking]))
+            preferences: preferences.reduce((prev, {shift_id, ranking}) => ({...prev, [shift_id]: ranking}), {})
         },
         shiftRankingSchema
     );

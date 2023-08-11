@@ -74,5 +74,5 @@ export const dueDateSchema = z.object({
 });
 
 export const shiftRankingSchema = z.object({
-    preferences: z.map(z.string(), z.number())
+    preferences: z.record(z.string(), z.number())
 });

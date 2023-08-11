@@ -9,7 +9,7 @@
 
 	export let shifts: ShiftWithType[];
 	export let date: Dayjs;
-	export let preferences: Map<string, number>;
+	export let preferences: Record<string, number>;
 	export let total: number;
 
 	const dispatch = createEventDispatcher<{
@@ -35,25 +35,26 @@
 		});
 	};
 
-	$: firstPref = shifts[0] ? preferences.get(shifts[0].id) : undefined;
+	$: firstPref = shifts[0] ? preferences[shifts[0].id] : undefined;
 
 	$: styles = {
-		'hue': firstPref != null ? `${120*firstPref/total}deg` : undefined
+		'hue': firstPref != null ? `${120*(1 - firstPref/total)}deg` : undefined
 	};
 </script>
 
 {#if shifts.length}
 	<div class="hidden md:flex flex-col">
 		{#each shifts as shift (shift.id)}
-			{@const pref = preferences.get(shift.id)}
+			{@const pref = preferences[shift.id]}
 			<ShiftVotingCard
-				--hue={pref != null ? `${120*pref/total}deg` : undefined}
+				--hue={pref != null ? `${120*(1 - pref/total)}deg` : undefined}
 				{shift}
 				on:click={() => dispatch('select', {shift_id: shift.id})} />
+			<input type="hidden" value={pref} />
 		{/each}
 	</div>
 
-	<button style:--hue={styles.hue} on:click={openModal} class="btn btn-icon flex md:hidden bg-surface-400-500-token">
+	<button type="button" style:--hue={styles.hue} on:click={openModal} class="btn btn-icon flex md:hidden bg-surface-400-500-token">
 		{date.date()}
 	</button>
 {/if}

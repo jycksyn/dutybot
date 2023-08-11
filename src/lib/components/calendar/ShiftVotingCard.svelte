@@ -5,7 +5,7 @@
     export let shift: ShiftWithType;
 </script>
 
-<button on:click class="card text-left w-full bg-surface-300-600-token text-sm p-1">
+<button type="button" on:click class="card text-left w-full bg-surface-300-600-token text-sm p-1">
     <p>
         <span class="font-bold"> {dayjs(shift.date).date()}</span>
         {shift.type.name}
