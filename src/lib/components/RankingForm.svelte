@@ -7,11 +7,12 @@
 	import Calendar from './calendar/Calendar.svelte';
 	import VotingDay from './calendar/VotingDay.svelte';
 	import { modalStore, type ModalSettings } from '@skeletonlabs/skeleton';
+	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 
 	export let shifts: ShiftWithType[];
 	export let shiftRankingForm: SuperForm<typeof shiftRankingSchema>;
 
-	$: ({ form, tainted, enhance } = shiftRankingForm);
+	$: ({ form, enhance, allErrors } = shiftRankingForm);
 
 	let rankingLastFirst = true;
 
@@ -20,9 +21,9 @@
 	$: {
 		form.update(($form) => {
 			const preferences: Record<string, number> = {};
-			let lastRank = rankingLastFirst ? shifts.length : 0;
+			let lastRank = rankingLastFirst ? shifts.length : -1;
 			const u = rankingLastFirst ? -1 : 1;
-			for (let group of rankingLastFirst ? [...queue].reverse() : queue) {
+			for (let group of queue) {
 				const ranking = (2 * lastRank + u * (group.length + 1)) / 2;
 				for (let shift_id of group) {
 					preferences[shift_id] = ranking;
@@ -52,9 +53,9 @@
 		title: 'Confirm Clear',
 		body: 'Are you sure you want to clear your ranked preferences?',
 		response: (r: boolean) => {
-            queue = [];
-            $form.preferences = {};
-        }
+			queue = [];
+			$form.preferences = {};
+		}
 	};
 
 	const handleClear = () => modalStore.trigger(confirmClear);
@@ -63,23 +64,30 @@
 		if ($form.preferences[shift_id] == undefined) {
 			if (shouldGroup) {
 				const group = [...(queue[queue.length - 1] ?? []), shift_id];
-				if (rankingLastFirst) return (queue = [group, ...queue.slice(0, -1)]);
 				return (queue = [...queue.slice(0, -1), group]);
 			}
-			if (rankingLastFirst) return (queue = [[shift_id], ...queue]);
 			return (queue = [...queue, [shift_id]]);
 		}
-		console.log(shouldGroup, $form.preferences[shift_id], 'hi');
 		queue = queue
 			.map((group) => group.filter((id) => id != shift_id))
 			.filter((group) => group.length);
 	};
 
 	$: canChangeOrdering = [0, shifts.length].includes(Object.keys($form.preferences).length);
+
+	const handleChangeOrdering = () => {
+		rankingLastFirst = !rankingLastFirst;
+        queue = [...queue.reverse()];
+	};
 </script>
 
-<form use:enhance method="post" class="flex flex-col justify-stretch gap-4">
-	<label class:opacity-50={!canChangeOrdering} class="btn variant-filled-primary">
+<form
+	action="?/submitpreferences"
+	use:enhance
+	method="post"
+	class="flex flex-col justify-stretch gap-4"
+>
+	<button on:click={handleChangeOrdering} disabled={!canChangeOrdering} class="btn variant-filled-primary">
 		<span class="flex flex-row justify-center items-center">
 			{#if rankingLastFirst}
 				<Icon class="h-4 mr-2" src={ArrowUp} /> Ranking last preferences first
@@ -87,13 +95,7 @@
 				<Icon class="h-4 mr-2" src={ArrowDown} /> Ranking first preferences first
 			{/if}
 		</span>
-		<input
-			disabled={!canChangeOrdering}
-			class="hidden"
-			type="checkbox"
-			bind:checked={rankingLastFirst}
-		/>
-	</label>
+	</button>
 
 	<Calendar let:date let:dayShifts {shifts}>
 		<VotingDay
@@ -126,5 +128,13 @@
 		<span class="flex flex-row justify-center items-center">
 			<Icon class="h-4 mr-2" src={XCircle} /> Clear Ranking
 		</span>
+	</button>
+
+	<button
+		disabled={!!$allErrors.length || Object.keys($form.preferences).length != shifts.length}
+		type="submit"
+		class="btn variant-filled-primary"
+	>
+		Submit Preferences
 	</button>
 </form>
