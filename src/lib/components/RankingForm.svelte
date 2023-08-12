@@ -21,7 +21,7 @@
             const preferences: Record<string, number> = {};
             let lastRank = rankingLastFirst ? shifts.length : 0;
             const u = rankingLastFirst ? -1 : 1;
-            for (let group of queue) {
+            for (let group of rankingLastFirst ? [...queue].reverse() : queue) {
                 const ranking = (2 * lastRank + u * (group.length + 1)) / 2;
                 for (let shift_id of group) {
                     preferences[shift_id] = ranking;
@@ -49,19 +49,21 @@
         if ($form.preferences[shift_id] == undefined) {
             if (shouldGroup) {
                 const group = [...(queue[queue.length - 1] ?? []), shift_id];
+                if (rankingLastFirst) return queue = [group, ...queue.slice(0, -1)];
                 return queue = [...queue.slice(0, -1), group];
             }
+            if (rankingLastFirst) return queue = [[shift_id], ...queue];
             return queue = [...queue, [shift_id]];
         }
         console.log(shouldGroup, $form.preferences[shift_id], "hi")
         queue = queue.map(group => group.filter(id => id != shift_id)).filter((group) => group.length);
     }
 
-	$: rankedShiftsExist = !!Object.keys($form.preferences).length;
+	$: canChangeOrdering = [0, shifts.length].includes(Object.keys($form.preferences).length);
 </script>
 
 <form use:enhance method="post" class="flex flex-col justify-stretch gap-4">
-	<label class:opacity-50={rankedShiftsExist} class="btn variant-filled-primary">
+	<label class:opacity-50={!canChangeOrdering} class="btn variant-filled-primary">
 		<span class="flex flex-row justify-center items-center">
 			{#if rankingLastFirst}
 				<Icon class="h-4 mr-2" src={ArrowUp} /> Ranking last preferences first
@@ -70,7 +72,7 @@
 			{/if}
 		</span>
 		<input
-			disabled={rankedShiftsExist}
+			disabled={!canChangeOrdering}
 			class="hidden"
 			type="checkbox"
 			bind:checked={rankingLastFirst}
