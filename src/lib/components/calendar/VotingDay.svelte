@@ -11,6 +11,7 @@
 	export let date: Dayjs;
 	export let preferences: Record<string, number>;
 	export let total: number;
+	export let group: string[] | undefined;
 
 	const dispatch = createEventDispatcher<{
 		select: {shift_id: string}
@@ -48,6 +49,7 @@
 			{@const pref = preferences[shift.id]}
 			<ShiftVotingCard
 				--hue={pref != null ? `${120*(1 - pref/total)}deg` : undefined}
+				inGroup={group?.includes(shift.id)}
 				{shift}
 				on:click={() => dispatch('select', {shift_id: shift.id})} />
 			<input type="hidden" value={pref} />

@@ -10,6 +10,7 @@
 	export let date: Dayjs;
 	export let preferences: Map<string, number>;
 	export let total: number;
+	export let group: string[] | undefined;
 </script>
 
 {#if $modalStore[0]}
@@ -22,6 +23,7 @@
 			<ShiftVotingCard
 				--hue={pref ? `${120*pref/total}deg` : undefined}
 				{shift}
+				inGroup={group?.includes(shift.id)}
 				on:click={() => $modalStore[0].response?.(shift.id)} />
 			{/each}
 		</ul>
