@@ -1,22 +1,28 @@
 <script lang="ts">
 	import type { ShiftWithType } from '$lib/dbtypes';
 	import type { shiftRankingSchema } from '$lib/forms';
+	import { modalStore, type ModalSettings } from '@skeletonlabs/skeleton';
 	import { ArrowDown, ArrowUp, RectangleGroup, XCircle } from '@steeze-ui/heroicons';
 	import { Icon } from '@steeze-ui/svelte-icon';
+	import { groupBy, isEqual } from 'lodash';
 	import type { SuperForm } from 'sveltekit-superforms/client';
+	import type { z } from 'zod';
 	import Calendar from './calendar/Calendar.svelte';
 	import VotingDay from './calendar/VotingDay.svelte';
-	import { modalStore, type ModalSettings } from '@skeletonlabs/skeleton';
-	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 
 	export let shifts: ShiftWithType[];
 	export let shiftRankingForm: SuperForm<typeof shiftRankingSchema>;
+    export let original: z.infer<typeof shiftRankingSchema>;
 
 	$: ({ form, enhance, allErrors } = shiftRankingForm);
 
 	let rankingLastFirst = true;
 
-	let queue: string[][] = [];
+	let queue: string[][] = [...Object.entries(
+        groupBy(Object.keys(original.preferences), pref => original.preferences[pref])
+    )].sort(
+        ([r1], [r2]) => parseFloat(r2) - parseFloat(r1)
+    ).map(([r, p]) => p);
 
 	$: {
 		form.update(($form) => {
@@ -53,6 +59,7 @@
 		title: 'Confirm Clear',
 		body: 'Are you sure you want to clear your ranked preferences?',
 		response: (r: boolean) => {
+            if (!r) return
 			queue = [];
 			$form.preferences = {};
 		}
@@ -68,6 +75,7 @@
 			}
 			return (queue = [...queue, [shift_id]]);
 		}
+        shouldGroup = false;
 		queue = queue
 			.map((group) => group.filter((id) => id != shift_id))
 			.filter((group) => group.length);
@@ -79,6 +87,8 @@
 		rankingLastFirst = !rankingLastFirst;
         queue = [...queue.reverse()];
 	};
+
+    $: changed = !isEqual(original.preferences, $form.preferences);
 </script>
 
 <form
@@ -131,7 +141,7 @@
 	</button>
 
 	<button
-		disabled={!!$allErrors.length || Object.keys($form.preferences).length != shifts.length}
+		disabled={!!$allErrors.length || Object.keys($form.preferences).length != shifts.length || !changed}
 		type="submit"
 		class="btn variant-filled-primary"
 	>

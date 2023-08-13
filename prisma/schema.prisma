@@ -114,10 +114,10 @@ model Response {
 
 model Preference {
   response_id   String
-  response      Response    @relation(fields: [response_id], references: [id])
+  response      Response    @relation(fields: [response_id], references: [id], onDelete: Cascade)
   shift_id      String
-  shift         Shift       @relation(fields: [shift_id], references: [id])
-  ranking       Int
+  shift         Shift       @relation(fields: [shift_id], references: [id], onDelete: Cascade)
+  ranking       Float
 
   @@id([response_id, shift_id])
 }

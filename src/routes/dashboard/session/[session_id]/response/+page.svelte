@@ -10,12 +10,11 @@
 
 	const shiftRankingForm = superForm(data.shiftRankingForm, {
 		validators: shiftRankingSchema,
-		dataType: 'json'
+		dataType: 'json',
+        onResult(event) {
+            console.log(event.result)
+        },
 	});
-    
-    export const {capture, restore} = shiftRankingForm;
-
-    export const snapshot = {capture, restore};
 </script>
 
-<RankingForm {shiftRankingForm} {shifts} />
+<RankingForm original={data.shiftRankingForm.data} {shiftRankingForm} {shifts} />
