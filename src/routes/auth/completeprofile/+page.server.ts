@@ -12,8 +12,11 @@ export const load: PageServerLoad = async ({ url, locals }) => {
 
 export const actions: Actions = {
     default: async ({ request, locals, url }) => {
-        const { user } = await locals.auth.validateUser();
-        if (!user) throw redirect(302, '/auth/login');
+        const authSession = await locals.auth.validate();
+    
+        const user_id = authSession?.user.userId;
+    
+        if (!user_id) throw redirect(302, '/auth/login');
 
         const form = await superValidate(request, userInfoSchema);
         console.log('POST', form);
@@ -24,10 +27,10 @@ export const actions: Actions = {
         try {
             await db.user.upsert({
                 where: {
-                    id: user.userId
+                    id: user_id
                 },
                 create: {
-                    id: user.userId,
+                    id: user_id,
                     ...form.data
                 },
                 update: form.data

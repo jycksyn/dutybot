@@ -4,10 +4,11 @@ import { db } from "$lib/server/db";
 
 
 export const load: LayoutServerLoad = async ({ locals, params }) => {
+    const authSession = await locals.auth.validate();
 
-    const { user: authUser } = await locals.auth.validateUser();
+    const user_id = authSession?.user.userId;
 
-    if (!authUser?.userId) throw redirect(303, '/auth/login');
+    if (!user_id) throw redirect(302, '/auth/login');
 
     const { session_id } = params;
 
@@ -36,7 +37,7 @@ export const load: LayoutServerLoad = async ({ locals, params }) => {
     });
 
     if (!session) throw error(404);
-    const currentMember = session.group.members.find(m => m.user_id == authUser.userId)
+    const currentMember = session.group.members.find(m => m.user_id == authSession.user.userId)
     if (!currentMember) throw error(404);
 
     return {session, ...currentMember};

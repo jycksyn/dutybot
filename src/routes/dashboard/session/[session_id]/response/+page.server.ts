@@ -33,10 +33,9 @@ export const load: PageServerLoad = async ({ parent, params }) => {
 
 export const actions: Actions = {
     submitpreferences: async ({ locals, params, request }) => {
-
-        const { user: authUser } = await locals.auth.validateUser();
-
-        const user_id = authUser?.userId;
+        const authSession = await locals.auth.validate();
+    
+        const user_id = authSession?.user.userId;
         const { session_id } = params;
 
         if (!user_id)

@@ -7,9 +7,9 @@ import { Repeat } from "@prisma/client";
 import dayjs from "$lib/dates";
 
 export const load: PageServerLoad = async ({locals, params}) => {
-    const {user: authUser} = await locals.auth.validateUser();
+    const authSession = await locals.auth.validate();
 
-    const user_id = authUser?.userId;
+    const user_id = authSession?.user.userId;
 
     if (!user_id) throw redirect(302, '/auth/login');
 
@@ -26,9 +26,9 @@ export const load: PageServerLoad = async ({locals, params}) => {
 export const actions: Actions = {
     newshifttype: async ({locals, request, params}) => {
 
-        const {user: authUser} = await locals.auth.validateUser();
+        const authSession = await locals.auth.validate();
     
-        const user_id = authUser?.userId;
+        const user_id = authSession?.user.userId;
     
         if (!user_id)
             throw redirect(302, '/auth/login');

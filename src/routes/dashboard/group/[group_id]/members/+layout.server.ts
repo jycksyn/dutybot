@@ -6,9 +6,9 @@ import type { LayoutServerLoad } from "./$types";
 
 
 export const load: LayoutServerLoad = async ({ url, locals, params }) => {
-    const {user: authUser} = await locals.auth.validateUser();
+    const session = await locals.auth.validate();
 
-    const user_id = authUser?.userId;
+    const user_id = session?.user.userId;
 
     if (!user_id) throw redirect(302, '/auth/login');
 

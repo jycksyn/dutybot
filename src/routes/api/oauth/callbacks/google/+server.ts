@@ -3,7 +3,7 @@ import { googleAuth } from "$lib/server/google";
 import { auth } from "$lib/server/lucia";
 import type { User } from "@prisma/client";
 import { redirect, resolvePath, type RequestHandler } from "@sveltejs/kit";
-import type { User as LuciaUser } from "lucia-auth";
+import type { User as LuciaUser } from "lucia";
 import lodash from "lodash";
 const { isNil, omitBy } = lodash;
 
@@ -18,7 +18,7 @@ export const GET: RequestHandler = async ({ cookies, url, locals }) => {
     }
 
     try {
-        var { existingUser, providerUser, createUser } = await googleAuth.validateCallback(code ?? "");
+        var { existingUser, googleUser, createUser } = await googleAuth.validateCallback(code ?? "");
 
         var authUser: LuciaUser;
         var user: User | null = null;
@@ -33,11 +33,16 @@ export const GET: RequestHandler = async ({ cookies, url, locals }) => {
             });
         } else {
             authUser = await createUser({
-                email: providerUser.email
+                attributes: {
+                    email: googleUser.email
+                }
             });
         }
 
-        const session = await auth.createSession(authUser.userId);
+        const session = await auth.createSession({
+            userId: authUser.userId,
+            attributes: {}
+        });
         locals.auth.setSession(session);
     } catch (e) {
         console.error(e);
@@ -46,18 +51,18 @@ export const GET: RequestHandler = async ({ cookies, url, locals }) => {
         });
     }
 
-    console.log({user});
+    console.log({ user });
 
     if (!user) {
         console.log("no user");
         const params = new URLSearchParams(omitBy({
-            name: providerUser.name,
-            email: providerUser.email
+            name: googleUser.name,
+            email: googleUser.email
         }, isNil) as Record<string, string>).toString();
 
         throw redirect(
             302,
-            "/auth/completeprofile?"+params
+            "/auth/completeprofile?" + params
         )
     }
 

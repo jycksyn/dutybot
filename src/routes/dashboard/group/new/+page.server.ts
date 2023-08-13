@@ -7,13 +7,13 @@ import { db } from "$lib/server/db";
 import type { User } from "@prisma/client";
 
 export const load: PageServerLoad = async ({ url, locals }) => {
-    const {user: authUser} = await locals.auth.validateUser();
+    const authSession = await locals.auth.validate();
 
-    const id = authUser?.userId;
+    const user_id = authSession?.user.userId;
 
-    if (!id) throw redirect(302, '/auth/login');
+    if (!user_id) throw redirect(302, '/auth/login');
 
-    const user: User | null = await db.user.findUnique({ where: {id} });
+    const user: User | null = await db.user.findUnique({ where: {id: user_id} });
 
     if (!user || !user.name || !user.email) throw redirect(302, '/auth/completeprofile');
 
@@ -21,7 +21,7 @@ export const load: PageServerLoad = async ({ url, locals }) => {
         members: [{
             name: user.name,
             email: user.email,
-            user_id: id,
+            user_id: user_id,
             is_admin: true,
             is_respondent: false
         }]
@@ -34,13 +34,11 @@ export const load: PageServerLoad = async ({ url, locals }) => {
 export const actions: Actions = {
     usersearch,
     newgroup: async ({locals, request}) => {
-
-        const {user: authUser} = await locals.auth.validateUser();
+        const authSession = await locals.auth.validate();
     
-        const id = authUser?.userId;
+        const user_id = authSession?.user.userId;
     
-        if (!id)
-            throw redirect(302, '/auth/login');
+        if (!user_id) throw redirect(302, '/auth/login');
 
         const form = await superValidate(request, groupSchema);
         console.log("POST", form);

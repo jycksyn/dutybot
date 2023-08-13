@@ -13,14 +13,12 @@ export const load: PageServerLoad = async ({parent}) => {
 export const actions: Actions = {
     usersearch,
     updategroup: async ({locals, request, params}) => {
-        
-        const {user: authUser} = await locals.auth.validateUser();
+        const authSession = await locals.auth.validate();
     
-        const id = authUser?.userId;
+        const user_id = authSession?.user.userId;
+    
+        if (!user_id) throw redirect(302, '/auth/login');
         const {group_id} = params;
-    
-        if (!id)
-            throw redirect(302, '/auth/login');
 
         const form = await superValidate(request, membersUpdateSchema);
         console.log("POST", form);
@@ -30,7 +28,7 @@ export const actions: Actions = {
         
         const member = await db.groupMember.findFirst({
             where: {
-                user_id: id,
+                user_id: user_id,
                 group_id,
                 is_admin: true
             },

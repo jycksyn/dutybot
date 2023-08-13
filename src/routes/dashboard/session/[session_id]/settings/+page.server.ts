@@ -20,14 +20,12 @@ export const load: PageServerLoad = async ({parent, params}) => {
 
 export const actions: Actions = {
     updateSessionSettings: async ({ request, params, locals }) => {
-
-        const { user: authUser } = await locals.auth.validateUser();
+        const authSession = await locals.auth.validate();
     
-        const user_id = authUser?.userId;
+        const user_id = authSession?.user.userId;
+    
+        if (!user_id) throw redirect(302, '/auth/login');
         const session_id = params.session_id!!;
-    
-        if (!user_id)
-            throw redirect(302, '/auth/login');
     
         const form = await superValidate(request, dueDateSchema);
         console.log("POST", form);
