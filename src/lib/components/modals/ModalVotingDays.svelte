@@ -8,7 +8,7 @@
 
 	export let shifts: ShiftWithType[];
 	export let date: Dayjs;
-	export let preferences: Map<string, number>;
+	export let preferences: Record<string, number>;
 	export let total: number;
 	export let group: string[] | undefined;
 </script>
@@ -19,7 +19,7 @@
 
 		<ul>
 			{#each shifts as shift, i (shift.id)}
-			{@const pref = preferences.get(shift.id)}
+			{@const pref = preferences[shift.id]}
 			<ShiftVotingCard
 				--hue={pref ? `${120*pref/total}deg` : undefined}
 				{shift}

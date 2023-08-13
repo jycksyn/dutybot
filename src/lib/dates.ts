@@ -17,6 +17,7 @@ dayjs.extend(isSameOrAfter);
 export default dayjs;
 
 export const prettyDate = (date: Parameters<typeof dayjs>[0], timezone: string | undefined = undefined) => dayjs.tz(date, timezone).format('MMMM D, YYYY');
+export const miniDate = (date: Parameters<typeof dayjs>[0], timezone: string | undefined = undefined) => dayjs.tz(date, timezone).format('MMM D');
 export const prettyAbstractTime = (time: Parameters<typeof dayjs>[0]) => dayjs.utc(time).format('LT');
 export const prettyTime = (time: Parameters<typeof dayjs>[0]) => dayjs(time).format('LT');
 

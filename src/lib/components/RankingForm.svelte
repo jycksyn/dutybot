@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { ShiftWithType } from '$lib/dbtypes';
 	import type { shiftRankingSchema } from '$lib/forms';
-	import { modalStore, type ModalSettings } from '@skeletonlabs/skeleton';
+	import { modalStore, type ModalSettings, ProgressRadial } from '@skeletonlabs/skeleton';
 	import { ArrowDown, ArrowUp, RectangleGroup, XCircle } from '@steeze-ui/heroicons';
 	import { Icon } from '@steeze-ui/svelte-icon';
 	import { groupBy, isEqual } from 'lodash';
@@ -9,20 +9,25 @@
 	import type { z } from 'zod';
 	import Calendar from './calendar/Calendar.svelte';
 	import VotingDay from './calendar/VotingDay.svelte';
+	import ModalConfirmRankings from './modals/ModalConfirmRankings.svelte';
+	import LoadingButtonText from './LoadingButtonText.svelte';
 
 	export let shifts: ShiftWithType[];
 	export let shiftRankingForm: SuperForm<typeof shiftRankingSchema>;
-    export let original: z.infer<typeof shiftRankingSchema>;
+	export let original: z.infer<typeof shiftRankingSchema>;
 
-	$: ({ form, enhance, allErrors } = shiftRankingForm);
+	$: ({ form, enhance, allErrors, delayed } = shiftRankingForm);
 
 	let rankingLastFirst = true;
+	let rankingForm: HTMLFormElement;
 
-	let queue: string[][] = [...Object.entries(
-        groupBy(Object.keys(original.preferences), pref => original.preferences[pref])
-    )].sort(
-        ([r1], [r2]) => parseFloat(r2) - parseFloat(r1)
-    ).map(([r, p]) => p);
+	let queue: string[][] = [
+		...Object.entries(
+			groupBy(Object.keys(original.preferences), (pref) => original.preferences[pref])
+		)
+	]
+		.sort(([r1], [r2]) => parseFloat(r2) - parseFloat(r1))
+		.map(([r, p]) => p);
 
 	$: {
 		form.update(($form) => {
@@ -59,10 +64,29 @@
 		title: 'Confirm Clear',
 		body: 'Are you sure you want to clear your ranked preferences?',
 		response: (r: boolean) => {
-            if (!r) return
+			if (!r) return;
 			queue = [];
 			$form.preferences = {};
 		}
+	};
+
+	const confirmSubmit = () => {
+		modalStore.trigger({
+			type: 'component',
+			component: {
+				ref: ModalConfirmRankings,
+				props: {
+					queue,
+					shifts,
+					rankingLastFirst,
+					preferences: $form.preferences
+				}
+			},
+			response: (r: boolean) => {
+				modalStore.close();
+				if (r) rankingForm.requestSubmit();
+			}
+		});
 	};
 
 	const handleClear = () => modalStore.trigger(confirmClear);
@@ -75,7 +99,7 @@
 			}
 			return (queue = [...queue, [shift_id]]);
 		}
-        shouldGroup = false;
+		shouldGroup = false;
 		queue = queue
 			.map((group) => group.filter((id) => id != shift_id))
 			.filter((group) => group.length);
@@ -85,19 +109,24 @@
 
 	const handleChangeOrdering = () => {
 		rankingLastFirst = !rankingLastFirst;
-        queue = [...queue.reverse()];
+		queue = [...queue.reverse()];
 	};
 
-    $: changed = !isEqual(original.preferences, $form.preferences);
+	$: changed = !isEqual(original.preferences, $form.preferences);
 </script>
 
 <form
+	bind:this={rankingForm}
 	action="?/submitpreferences"
 	use:enhance
 	method="post"
 	class="flex flex-col justify-stretch gap-4"
 >
-	<button on:click={handleChangeOrdering} disabled={!canChangeOrdering} class="btn variant-filled-primary">
+	<button
+		on:click={handleChangeOrdering}
+		disabled={!canChangeOrdering}
+		class="btn variant-filled-primary"
+	>
 		<span class="flex flex-row justify-center items-center">
 			{#if rankingLastFirst}
 				<Icon class="h-4 mr-2" src={ArrowUp} /> Ranking last preferences first
@@ -141,10 +170,15 @@
 	</button>
 
 	<button
-		disabled={!!$allErrors.length || Object.keys($form.preferences).length != shifts.length || !changed}
-		type="submit"
+		on:click={confirmSubmit}
+		disabled={!!$allErrors.length ||
+			Object.keys($form.preferences).length != shifts.length ||
+			!changed}
+		type="button"
 		class="btn variant-filled-primary"
 	>
-		Submit Preferences
+            <LoadingButtonText d={$delayed}>
+                Submit Preferences
+            </LoadingButtonText>
 	</button>
 </form>
