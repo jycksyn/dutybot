@@ -19,8 +19,8 @@
 	<div class="card p-4 w-modal shadow-xl space-y-4">
 		<h2 class="text-2xl font-bold">Confirm Ranking</h2>
 
-		<div class="flex flex-wrap flex-row gap-2 items-center font-bold">
-            <span class="rounded py-1 px-2 bg-primary-300-600-token">
+		<div class="flex flex-wrap flex-row gap-2 items-center">
+            <span class="font-bold rounded py-1 px-2 bg-primary-300-600-token">
 				{#if rankingLastFirst}
                     Least Preferred:
                 {:else}
@@ -34,15 +34,17 @@
                             `hsl(${120 * (1 - preferences[shift_id] / shifts.length)}deg, 60%, 60%)`
                         } class="ring-2 rounded p-1 rankring">{miniDate(shift.date)}</span>
                         {#if j + 1 != grp.length}
-                            <span class="text-gray-400">=</span>
+                            <span class="text-gray-400 font-bold">=</span>
                         {/if}
 					{/each}
 				{#if i + 1 != queue.length}
+                <span class="font-bold">
 					{#if rankingLastFirst}
 						{'<'}
 					{:else}
 						{'>'}
 					{/if}
+                </span>
 				{/if}
 			{/each}
 		</div>

@@ -21,7 +21,7 @@
 			{#each shifts as shift, i (shift.id)}
 			{@const pref = preferences[shift.id]}
 			<ShiftVotingCard
-				--hue={pref ? `${120*pref/total}deg` : undefined}
+				--hue={pref ? `${120*(1-pref/total)}deg` : undefined}
 				{shift}
 				inGroup={group?.includes(shift.id)}
 				on:click={() => $modalStore[0].response?.(shift.id)} />

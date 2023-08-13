@@ -18,6 +18,10 @@
 	}>();
 
 	const openModal = () => {
+		if (shifts.length == 1 && !preferences[shifts[0].id]) {
+			dispatch('select', {shift_id: shifts[0].id});
+			return;
+		}
 		modalStore.trigger({
 			type: 'component',
 			component: {
@@ -56,7 +60,7 @@
 		{/each}
 	</div>
 
-	<button type="button" style:--hue={styles.hue} on:click={openModal} class="btn btn-icon flex md:hidden bg-surface-400-500-token">
+	<button class:ring-2={shifts.length == 1 && group?.includes(shifts[0].id)} type="button" style:--hue={styles.hue} on:click={openModal} class="btn btn-icon flex md:hidden bg-surface-400-500-token">
 		{date.date()}
 	</button>
 {/if}
