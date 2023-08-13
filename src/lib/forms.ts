@@ -72,3 +72,7 @@ export const dueDateSchema = z.object({
     dueDate: z.coerce.date().nullable(),
     openForResponses: z.boolean()
 });
+
+export const shiftRankingSchema = z.object({
+    preferences: z.record(z.string(), z.number())
+});

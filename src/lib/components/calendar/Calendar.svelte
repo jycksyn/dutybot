@@ -1,17 +1,23 @@
 <script lang="ts">
-	import type { Dayjs } from 'dayjs';
-	import DayWrapper from './DayWrapper.svelte';
-	import { Prisma, type Shift } from '@prisma/client';
 	import dayjs from '$lib/dates';
+	import type { ShiftWithType } from '$lib/dbtypes';
+	import { Prisma } from '@prisma/client';
+	import type { Dayjs } from 'dayjs';
+	import { groupBy } from 'lodash';
 
-	const shiftWithType = Prisma.validator<Prisma.ShiftArgs>()({
-		include: { type: true }
-	});
+	export let shifts: ShiftWithType[];
 
-	export let shifts: Prisma.ShiftGetPayload<typeof shiftWithType>[];
+	let shiftsByDay: Map<string, ShiftWithType[]>;
+	let start: Dayjs | undefined;
+	let end:Dayjs | undefined;
 
-	export let start: Dayjs;
-	export let end: Dayjs;
+	$: {
+		shiftsByDay = new Map(Object.entries(groupBy(shifts, shift => shift.date.toISOString())));
+		start = [...shiftsByDay.keys()].reduce<Dayjs | undefined>((p,c) => p && p.isBefore(dayjs(c)) ? p : dayjs(c), undefined);
+		end = [...shiftsByDay.keys()].reduce<Dayjs | undefined>((p,c) => p && p.isAfter(dayjs(c)) ? p : dayjs(c), undefined);
+	}
+
+	let selectedDate: Dayjs | undefined = undefined;
 </script>
 
 <div>
@@ -21,13 +27,17 @@
 		{/each}
 	</ul>
 
-	<ol class="grid grid-cols-7 gap-y-2 gap-x-1">
-		{#each { length: end.diff(start, 'day') + 1 } as _, i}
-			{@const date = start.add(i, 'day')}
-			{@const day = date.day()}
-			<li class="{i == 0 ? `col-start-${day + 1} ` : ''}flex items-center justify-center list-none">
-				<DayWrapper {date} shifts={shifts.filter((d) => dayjs(d.date).isSame(date, 'date'))} />
-			</li>
-		{/each}
-	</ol>
+	{#if start && end}
+		<ol class="grid grid-cols-7 gap-y-2 gap-x-1">
+			{#each { length: end.diff(start, 'day') + 1 } as _, i}
+				{@const date = start.add(i, 'day')}
+				{@const day = date.day()}
+
+				<li class="{i == 0 ? `col-start-${day + 1} ` : ''}flex items-start justify-center list-none">
+					<slot {date} dayShifts={shiftsByDay.get(date.toISOString()) ?? []} />
+				</li>
+			{/each}
+		</ol>
+	{/if}
+
 </div>
