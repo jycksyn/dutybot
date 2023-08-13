@@ -13,7 +13,7 @@
 		"postinstall": "prisma generate"
 	},
 	"devDependencies": {
-		"@skeletonlabs/skeleton": "^1.9.0",
+		"@skeletonlabs/skeleton": "^1.11.0",
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.5.0",
 		"@tailwindcss/forms": "^0.5.3",
