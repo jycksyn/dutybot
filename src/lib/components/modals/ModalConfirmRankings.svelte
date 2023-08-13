@@ -1,11 +1,8 @@
 <script lang="ts">
 	import { miniDate } from '$lib/dates';
 	import type { ShiftWithType } from '$lib/dbtypes';
-	import type { shiftTypeSchema } from '$lib/forms';
 	import { modalStore } from '@skeletonlabs/skeleton';
 	import { groupBy } from 'lodash';
-	import type { SuperForm } from 'sveltekit-superforms/client';
-	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 
 	export let shifts: ShiftWithType[];
 	export let queue: string[][];

@@ -5,6 +5,8 @@
 	src: url('/fonts/Quicksand-VariableFont_wght.ttf');
 }
 
+html, body { @apply h-full overflow-hidden; }
+
 :root {
     --theme-font-family-base: 'Quicksand', sans-serif;
     --theme-font-family-heading: 'Quicksand', sans-serif;
