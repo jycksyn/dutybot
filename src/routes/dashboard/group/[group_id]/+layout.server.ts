@@ -3,10 +3,11 @@ import type { LayoutServerLoad } from "./$types";
 import { db } from "$lib/server/db";
 
 export const load: LayoutServerLoad = async ({ locals, params }) => {
+    const authSession = await locals.auth.validate();
 
-    const { user: authUser } = await locals.auth.validateUser();
+    const user_id = authSession?.user.userId;
 
-    if (!authUser?.userId) throw redirect(303, '/auth/login');
+    if (!user_id) throw redirect(302, '/auth/login');
 
     const { group_id } = params;
 
@@ -14,7 +15,7 @@ export const load: LayoutServerLoad = async ({ locals, params }) => {
         where: {
             group_id_user_id: {
                 group_id,
-                user_id: authUser.userId
+                user_id
             }
         },
         include: {

@@ -4,9 +4,9 @@ import type { PageServerLoad } from "./$types";
 
 
 export const load: PageServerLoad = async ({ url, locals }) => {
-    const {user: authUser} = await locals.auth.validateUser();
+    const session = await locals.auth.validate();
 
-    const user_id = authUser?.userId;
+    const user_id = session?.user.userId;
 
     if (!user_id) throw redirect(302, '/auth/login');
 

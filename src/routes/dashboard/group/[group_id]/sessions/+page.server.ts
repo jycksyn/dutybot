@@ -7,9 +7,9 @@ import dayjs from "$lib/dates";
 import utc from "dayjs/plugin/utc";
 
 export const load: PageServerLoad = async ({locals, params}) => {
-    const {user: authUser} = await locals.auth.validateUser();
+    const session = await locals.auth.validate();
 
-    const user_id = authUser?.userId;
+    const user_id = session?.user.userId;
 
     if (!user_id) throw redirect(302, '/auth/login');
 
@@ -29,9 +29,9 @@ export const actions: Actions = {
         const formm = await request.formData();
         console.log(...formm.entries())
 
-        const {user: authUser} = await locals.auth.validateUser();
+        const authSession = await locals.auth.validate();
     
-        const user_id = authUser?.userId;
+        const user_id = authSession?.user.userId;
     
         if (!user_id)
             throw redirect(302, '/auth/login');
