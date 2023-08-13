@@ -23,7 +23,7 @@
 		XMark
 	} from '@steeze-ui/heroicons';
 
-	import { Icon } from '@steeze-ui/svelte-icon';
+	import Icon from '$lib/components/Icon.svelte';
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 
 	export let data: ContainsUserSearchForm;

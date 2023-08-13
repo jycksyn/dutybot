@@ -3,7 +3,7 @@
 	import type { shiftRankingSchema } from '$lib/forms';
 	import { modalStore, type ModalSettings, ProgressRadial } from '@skeletonlabs/skeleton';
 	import { ArrowDown, ArrowUp, RectangleGroup, XCircle } from '@steeze-ui/heroicons';
-	import { Icon } from '@steeze-ui/svelte-icon';
+	import Icon from '$lib/components/Icon.svelte';
 	import { groupBy, isEqual } from 'lodash';
 	import type { SuperForm } from 'sveltekit-superforms/client';
 	import type { z } from 'zod';

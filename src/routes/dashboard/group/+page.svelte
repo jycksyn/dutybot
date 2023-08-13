@@ -1,7 +1,7 @@
 <script lang="ts">
+	import Icon from '$lib/components/Icon.svelte';
 	import { Avatar } from '@skeletonlabs/skeleton';
 	import { Eye, Plus, Star } from '@steeze-ui/heroicons';
-	import { Icon } from '@steeze-ui/svelte-icon';
 
 	export let data;
 
@@ -16,7 +16,7 @@
 	</a>
 </header>
 
-<ul class="list m-8 flex flex-col gap-2">
+<ul class="list my-8 mx-2 md:mx-8 flex flex-col gap-2">
 	{#each memberOf as {group, is_admin} (group.id)}
 		<li>
 			<Avatar width="w-14" initials={group.emoji} />
@@ -31,7 +31,7 @@
 				{/if}
 			</div>
 			<a href={`/dashboard/group/${group.id}`} class="btn btn-sm variant-soft-primary">
-				<Icon class="h-6 mr-2 -ml-1" src={Eye} />
+				<Icon class="h-6" src={Eye} />
 				Details
 			</a>
 		</li>

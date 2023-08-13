@@ -5,7 +5,7 @@
 	import { shiftTypeSchema } from '$lib/forms.js';
 	import { modalStore } from '@skeletonlabs/skeleton';
 	import { Plus } from '@steeze-ui/heroicons';
-	import { Icon } from '@steeze-ui/svelte-icon';
+	import Icon from '$lib/components/Icon.svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 
 	export let data;

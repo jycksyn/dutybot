@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Gravatar from '$lib/components/Gravatar.svelte';
 	import { ChatBubbleBottomCenterText, Pencil, Star } from '@steeze-ui/heroicons';
-	import { Icon } from '@steeze-ui/svelte-icon';
+	import Icon from '$lib/components/Icon.svelte';
 
 	export let data;
 
