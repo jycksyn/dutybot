@@ -4,7 +4,7 @@
 	import { href } from '$lib/href';
 	import { AppRail, AppShell, TabAnchor, TabGroup } from '@skeletonlabs/skeleton';
 	import { Calendar, User, UserGroup } from '@steeze-ui/heroicons';
-	import { Icon } from '@steeze-ui/svelte-icon';
+	import Icon from '$lib/components/Icon.svelte';
 
 	
 </script>
@@ -41,17 +41,17 @@
 >
 	<TabAnchor {...href("/dashboard/session", $page)}>
 		<svelte:fragment slot="lead">
-			<Icon class="h-6" src={Calendar} />
+			<Icon class="h-6 w-full" src={Calendar} />
 		</svelte:fragment>
 	</TabAnchor>
 	<TabAnchor {...href("/dashboard/group", $page)}>
 		<svelte:fragment slot="lead">
-			<Icon class="h-6" src={UserGroup} />
+			<Icon class="h-6 w-full" src={UserGroup} />
 		</svelte:fragment>
 	</TabAnchor>
 	<TabAnchor {...href("/dashboard/user", $page)}>
 		<svelte:fragment slot="lead">
-			<Icon class="h-6" src={User} />
+			<Icon class="h-6 w-full" src={User} />
 		</svelte:fragment>
 	</TabAnchor>
 </TabGroup>

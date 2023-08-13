@@ -4,7 +4,7 @@
 	import { TabAnchor } from '@skeletonlabs/skeleton';
 	import { TabGroup } from '@skeletonlabs/skeleton';
 	import { page } from '$app/stores';
-	import { Icon } from '@steeze-ui/svelte-icon';
+	import Icon from '$lib/components/Icon.svelte';
 	import { UserGroup } from '@steeze-ui/heroicons';
 
 	export let data;
@@ -27,7 +27,7 @@
 	<section>
 		<h4 class="h4 mt-4">
 			<a href="/dashboard/group/{session.group_id}/sessions">
-				<Icon class="h-6 w-6 inline stroke-gray-500" src={UserGroup} />
+				<Icon theme="solid" class="h-6 w-6 inline fill-gray-500" src={UserGroup} />
 				{session.group.name}
 			</a>
 		</h4>

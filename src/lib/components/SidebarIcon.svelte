@@ -1,7 +1,7 @@
 <script lang="ts">
 
 	import { AppRailAnchor } from "@skeletonlabs/skeleton";
-	import { Icon } from "@steeze-ui/svelte-icon";
+	import Icon from '$lib/components/Icon.svelte';
     import type { IconSource } from "@steeze-ui/heroicons/types";
     import { page } from "$app/stores";
 

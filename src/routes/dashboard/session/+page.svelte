@@ -1,7 +1,7 @@
 <script>
 	import { Avatar, ProgressRadial } from '@skeletonlabs/skeleton';
 	import { Star } from '@steeze-ui/heroicons';
-	import { Icon } from '@steeze-ui/svelte-icon';
+	import Icon from '$lib/components/Icon.svelte';
 </script>
 
 <h2 class="h2 font-semibold">Sessions</h2>

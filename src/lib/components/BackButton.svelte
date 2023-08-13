@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { ArrowLeft } from '@steeze-ui/heroicons';
-
-	import { Icon } from '@steeze-ui/svelte-icon';
+	import Icon from './Icon.svelte';
 
 	export let href: string | undefined = undefined;
 </script>
