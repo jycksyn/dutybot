@@ -17,7 +17,11 @@ export const load: LayoutServerLoad = async ({ url, locals, params }) => {
             group_id: params.group_id
         },
         include: {
-            user: true
+            user: {
+                include: {
+                    auth_user: true
+                }
+            }
         }
     });
 
@@ -29,7 +33,7 @@ export const load: LayoutServerLoad = async ({ url, locals, params }) => {
         members: members.map(m => ({
             user_id: m.user.id,
             name: m.user.name,
-            email: m.user.email ?? '',
+            email: m.user.auth_user.email ?? '',
             is_admin: m.is_admin,
             is_respondent: m.is_respondent
         }))

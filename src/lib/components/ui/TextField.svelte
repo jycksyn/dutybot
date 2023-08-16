@@ -24,6 +24,7 @@
       bind:value={$value}
       {...$constraints}
       {...$$restProps}
+      class:opacity-50={$$restProps.readonly}
       class="input"
   />
   {#if $errors}<span class="text-red-600">{$errors}</span>{/if}

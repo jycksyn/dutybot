@@ -16,8 +16,7 @@ model AuthUser {
   id           String         @id @unique
   auth_session AuthSession[]
   auth_key     AuthKey[]
-  email        String?        @unique
-  userId       String?        @unique
+  email        String         @unique
   user         User?
   @@map("auth_user")
 }
@@ -46,7 +45,6 @@ model AuthKey {
 model User {
   id            String      @id @unique
   auth_user     AuthUser    @relation(fields: [id], references: [id], onDelete: Cascade)
-  email         String?     @unique
   name          String? 
   joined        DateTime    @default(now())
   prefersEmoji  Boolean     @default(false)

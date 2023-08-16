@@ -13,14 +13,17 @@ export const load: PageServerLoad = async ({ url, locals }) => {
 
     if (!user_id) throw redirect(302, '/auth/login');
 
-    const user: User | null = await db.user.findUnique({ where: {id: user_id} });
+    const user = await db.user.findUnique({ 
+        where: {id: user_id},
+        include: {auth_user: true}
+    });
 
-    if (!user || !user.name || !user.email) throw redirect(302, '/auth/completeprofile');
+    if (!user || !user.name || !user.auth_user.email) throw redirect(302, '/auth/completeprofile');
 
     const groupForm = await superValidate({
         members: [{
             name: user.name,
-            email: user.email,
+            email: user.auth_user.email,
             user_id: user_id,
             is_admin: true,
             is_respondent: false

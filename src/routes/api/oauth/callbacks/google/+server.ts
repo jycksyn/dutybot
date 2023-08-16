@@ -2,9 +2,9 @@ import { db } from "$lib/server/db";
 import { googleAuth } from "$lib/server/google";
 import { auth } from "$lib/server/lucia";
 import type { User } from "@prisma/client";
-import { redirect, resolvePath, type RequestHandler } from "@sveltejs/kit";
-import type { User as LuciaUser } from "lucia";
+import { redirect, type RequestHandler } from "@sveltejs/kit";
 import lodash from "lodash";
+import type { User as LuciaUser } from "lucia";
 const { isNil, omitBy } = lodash;
 
 export const GET: RequestHandler = async ({ cookies, url, locals }) => {
@@ -19,6 +19,8 @@ export const GET: RequestHandler = async ({ cookies, url, locals }) => {
 
     try {
         var { existingUser, googleUser, createUser } = await googleAuth.validateCallback(code ?? "");
+
+        console.log(googleUser);
 
         var authUser: LuciaUser;
         var user: User | null = null;
