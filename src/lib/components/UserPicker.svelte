@@ -92,7 +92,8 @@
 
 	const addMember = () => {
 		if ($result?.user == undefined) return;
-		const { name, email, id } = $result.user;
+		const { name, id } = $result.user;
+		const email = $result.user.auth_user.email;
 		if (!email) return;
 		$parent.members = [
 			...$parent.members,
@@ -186,10 +187,10 @@
 			<ul class="list">
 				<li>
 					<button type="button" on:click={addMember} class="list-option text-left w-full">
-						<span><Gravatar class="h-10" width="w-10" email={$result.user.email} /></span>
+						<span><Gravatar class="h-10" width="w-10" email={$result.user.auth_user.email} /></span>
 						<div class="flex-auto flex flex-col">
 							<span class="text-md">{$result.user.name}</span>
-							<span class="text-sm text-gray-500">{$result.user.email}</span>
+							<span class="text-sm text-gray-500">{$result.user.auth_user.email}</span>
 						</div>
 					</button>
 				</li>

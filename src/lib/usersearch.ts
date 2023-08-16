@@ -3,9 +3,10 @@ import type { User } from "@prisma/client";
 import { superValidate, message } from "sveltekit-superforms/server";
 import { searchUsersSchema } from "./forms";
 import { db } from "./server/db";
+import type { UserWithAuthUser } from "./dbtypes";
 
 export type UserSearchResult = {
-    user: User | null
+    user: UserWithAuthUser | null
 }
 
 const usersearch: Action = async ({ request }) => {
@@ -23,7 +24,11 @@ const usersearch: Action = async ({ request }) => {
                 email
             },
             include: {
-                user: true
+                user: {
+                    include: {
+                        auth_user: true
+                    }
+                }
             }
         });
 
