@@ -7,15 +7,33 @@ import { generateShifts } from "$lib/server/shifts";
 import dayjs from "$lib/dates";
 import { dueDateSchema } from "$lib/forms";
 
-export const load: PageServerLoad = async ({parent, params}) => {
-    const {is_admin, session: {dueDate, openForResponses}} = await parent();
-    if(!is_admin) {
+export const load: PageServerLoad = async ({ parent, params }) => {
+    const { is_admin, session: { id: session_id, dueDate, openForResponses } } = await parent();
+    if (!is_admin) {
         throw redirect(303, `/dashboard/session/${params.session_id}/calendar`)
     }
+    
+    var constraints = await db.sessionConstraint.findMany({
+        where: {
+            session_id,
+        },
+        include: {
+            members: {
+                include: {
+                    member: {
+                        include: {
+                            user: true
+                        }
+                    }
+                }
+            },
+            shift_type: true
+        }
+    });
 
     const dueDateForm = await superValidate({ dueDate, openForResponses }, dueDateSchema);
 
-    return {dueDateForm};
+    return { dueDateForm, constraints };
 }
 
 export const actions: Actions = {
@@ -29,10 +47,10 @@ export const actions: Actions = {
     
         const form = await superValidate(request, dueDateSchema);
         console.log("POST", form);
-    
+
         if (!form.valid)
             return fail(400, { form });
-    
+
         let session = await db.session.findUnique({
             where: {
                 id: session_id
@@ -50,14 +68,14 @@ export const actions: Actions = {
                 },
             }
         });
-    
+
         const is_admin = !!session?.group.members.find(m => m.is_admin && m.user_id == user_id);
-    
+
         if (!session || !is_admin)
             throw redirect(302, '/dashboard/group');
-    
+
         const { dueDate, openForResponses } = form.data;
-    
+
         try {
             session = await db.session.update({
                 where: {

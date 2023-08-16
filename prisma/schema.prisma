@@ -74,6 +74,7 @@ model GroupMember {
   nickname      String?
   responses     Response[]
   shifts        ShiftAssignment[]
+  constraint    MembersOnSessionConstraints[]
 
   @@id([group_id, user_id])
 	@@map("GroupMembers")
@@ -93,6 +94,29 @@ model Session {
   final_cal         DutyCalendar?  @relation("final_calendar", fields: [final_cal_id], references: [id])
   dueDate           DateTime?
   openForResponses  Boolean        @default(false)
+  constraints       SessionConstraint[]
+}
+
+model MembersOnSessionConstraints {
+  group_id      String
+  user_id       String
+  member        GroupMember       @relation(references: [group_id, user_id], fields: [group_id, user_id])
+  constraint_id String
+  constraint    SessionConstraint @relation(references: [id], fields: [constraint_id])
+
+  @@id([group_id, user_id, constraint_id])
+}
+
+model SessionConstraint {
+  id            String                        @id @unique @default(cuid())
+  session_id    String
+  session       Session                       @relation(fields: [session_id], references: [id])
+  members       MembersOnSessionConstraints[]
+  type_id       String
+  shift_type    ShiftType                     @relation(fields: [type_id], references: [id])
+  min           Int?
+  max           Int?
+  everyone      Boolean
 }
 
 model Response {
@@ -131,6 +155,7 @@ model ShiftType {
   shifts        Shift[]
   repeat_days   ShiftTypeRepeat[]
   sessions      Session[]
+  constraints   SessionConstraint[]
 }
 
 enum Repeat {

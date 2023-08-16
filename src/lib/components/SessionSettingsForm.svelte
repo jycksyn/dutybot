@@ -46,7 +46,6 @@
 		/>
 	</label>
 
-	
 	<button disabled={!changed || !!$allErrors.length} class="btn variant-filled-primary">
 		<span class="flex flex-row justify-center items-center">
 			Save Changes
