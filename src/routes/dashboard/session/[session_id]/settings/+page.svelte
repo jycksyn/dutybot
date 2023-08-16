@@ -7,5 +7,3 @@ import SessionSettingsForm from '$lib/components/SessionSettingsForm.svelte';
 </script>
 
 <SessionSettingsForm {data} />
-
-<SessionConstraintsTable constraints={data.constraints} />

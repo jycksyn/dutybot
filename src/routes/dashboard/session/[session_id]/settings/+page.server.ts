@@ -13,27 +13,27 @@ export const load: PageServerLoad = async ({ parent, params }) => {
         throw redirect(303, `/dashboard/session/${params.session_id}/calendar`)
     }
     
-    var constraints = await db.sessionConstraint.findMany({
-        where: {
-            session_id,
-        },
-        include: {
-            members: {
-                include: {
-                    member: {
-                        include: {
-                            user: true
-                        }
-                    }
-                }
-            },
-            shift_type: true
-        }
-    });
+    // var constraints = await db.sessionConstraint.findMany({
+    //     where: {
+    //         session_id,
+    //     },
+    //     include: {
+    //         members: {
+    //             include: {
+    //                 member: {
+    //                     include: {
+    //                         user: true
+    //                     }
+    //                 }
+    //             }
+    //         },
+    //         shift_type: true
+    //     }
+    // });
 
     const dueDateForm = await superValidate({ dueDate, openForResponses }, dueDateSchema);
 
-    return { dueDateForm, constraints };
+    return { dueDateForm };
 }
 
 export const actions: Actions = {

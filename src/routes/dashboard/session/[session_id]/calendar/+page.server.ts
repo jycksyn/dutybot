@@ -3,7 +3,7 @@ import { fail, redirect, type Actions } from "@sveltejs/kit";
 import { message, superValidate } from "sveltekit-superforms/client";
 import type { PageServerLoad } from "./$types";
 import { db } from "$lib/server/db";
-import { generateEveryoneConstraints, generateShifts } from "$lib/shifts";
+import { generateEveryoneConstraints, generateShifts } from "$lib/server/shifts";
 import dayjs from "$lib/dates";
 
 export const load: PageServerLoad = async ({ parent }) => {
