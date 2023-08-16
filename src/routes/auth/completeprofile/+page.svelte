@@ -24,7 +24,7 @@
 
 	<div class="grid grid-cols-4 items-center justify-items-stretch">
 		<Gravatar class="col-span-1" email={$formStore.email} />
-		<TextField {form} field="email" class="col-span-3" />
+		<TextField readonly {form} field="email" class="col-span-3" />
 	</div>
 
 	<button disabled={!!$allErrors.length} class="btn variant-filled-secondary">Submit</button>

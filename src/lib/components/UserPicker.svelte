@@ -92,7 +92,8 @@
 
 	const addMember = () => {
 		if ($result?.user == undefined) return;
-		const { name, email, id } = $result.user;
+		const { name, id } = $result.user;
+		const email = $result.user.auth_user.email;
 		if (!email) return;
 		$parent.members = [
 			...$parent.members,
@@ -182,14 +183,14 @@
 			<div class="p-2 text-error-600">{$errors?.email ?? 'Please enter an email'}</div>
 		{:else if $delayed || waiting}
 			<div class="placeholder h-10" />
-		{:else if $result?.user?.email == $values.email}
+		{:else if $result?.user?.auth_user.email == $values.email}
 			<ul class="list">
 				<li>
 					<button type="button" on:click={addMember} class="list-option text-left w-full">
-						<span><Gravatar class="h-10" width="w-10" email={$result.user.email} /></span>
+						<span><Gravatar class="h-10" width="w-10" email={$result.user.auth_user.email} /></span>
 						<div class="flex-auto flex flex-col">
 							<span class="text-md">{$result.user.name}</span>
-							<span class="text-sm text-gray-500">{$result.user.email}</span>
+							<span class="text-sm text-gray-500">{$result.user.auth_user.email}</span>
 						</div>
 					</button>
 				</li>

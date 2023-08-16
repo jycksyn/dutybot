@@ -6,6 +6,24 @@ export const userInfoSchema = z.object({
     email: z.string().email()
 });
 
+export const emailUserLoginSchema = z.object({
+    email: z.string().email(),
+    password: z.string().min(1)
+});
+
+export const emailUserSignupSchema = z.object({
+    name: z.string().min(1),
+    email: z.string().email(),
+    password: z.string().min(8).regex(
+        /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,}$/, 
+        "Password must have a uppercase letter, a lowercase letter, a number, and a special character."
+    ),
+    confirmPassword: z.string().min(8),
+}).refine(
+    ({password, confirmPassword}) => password == confirmPassword,
+    "Passwords must match"
+);
+
 export const rolesSchema = z.enum(['admin', 'respondent', 'owner']);
 
 export const memberSchema = z.object({

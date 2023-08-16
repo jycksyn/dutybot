@@ -21,6 +21,8 @@ export const actions: Actions = {
         const form = await superValidate(request, userInfoSchema);
         console.log('POST', form);
 
+        const {name} = form.data;
+
         if (!form.valid) {
             return fail(400, { form });
         }
@@ -31,9 +33,11 @@ export const actions: Actions = {
                 },
                 create: {
                     id: user_id,
-                    ...form.data
+                    name
                 },
-                update: form.data
+                update: {
+                    name
+                }
             });
         } catch (e) {
             console.error(e);

@@ -18,9 +18,9 @@ export const load: PageServerLoad = async ({parent}) => {
 export const actions: Actions = {
     selectShiftTypes: async ({ request, params, locals }) => {
 
-        const { user: authUser } = await locals.auth.validateUser();
+        const authSession = await locals.auth.validate();
     
-        const user_id = authUser?.userId;
+        const user_id = authSession?.user.userId;
         const session_id = params.session_id!!;
     
         if (!user_id)
