@@ -183,7 +183,7 @@
 			<div class="p-2 text-error-600">{$errors?.email ?? 'Please enter an email'}</div>
 		{:else if $delayed || waiting}
 			<div class="placeholder h-10" />
-		{:else if $result?.user?.email == $values.email}
+		{:else if $result?.user?.auth_user.email == $values.email}
 			<ul class="list">
 				<li>
 					<button type="button" on:click={addMember} class="list-option text-left w-full">
