@@ -94,3 +94,11 @@ export const dueDateSchema = z.object({
 export const shiftRankingSchema = z.object({
     preferences: z.record(z.string(), z.number())
 });
+
+export const updateConstraintSchema = z.object({
+    members: z.array(z.string()),
+    type_id: z.string(),
+    max: z.number().nullable(),
+    min: z.number().nullable(),
+    id: z.string().optional(),
+}).refine(({max, min}) => max == null || min == null || min <= max, "Max must not be less than min")

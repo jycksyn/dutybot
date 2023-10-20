@@ -14,7 +14,8 @@
 	const SUBPAGES: [string, string, boolean][] = [
 		['Calendar', `/dashboard/session/${session.id}/calendar`, true],
 		['Response', `/dashboard/session/${session.id}/response`, is_respondent],
-		['Settings', `/dashboard/session/${session.id}/settings`, is_admin]
+		['Settings', `/dashboard/session/${session.id}/settings`, is_admin],
+		['Assign', `/dashboard/session/${session.id}/assign`, is_admin]
 	];
 </script>
 

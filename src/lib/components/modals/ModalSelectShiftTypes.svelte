@@ -34,8 +34,6 @@
 				<button type="button" class="btn variant-ghost" on:click={modalStore.close}>Close</button>
 				<button disabled={!!$allErrors.length} class="btn variant-filled-primary">Create</button>
 			</div>
-
-			<SuperDebug data={{$form, $allErrors}} />
 		</form>
 	</div>
 {/if}

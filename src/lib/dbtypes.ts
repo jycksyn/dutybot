@@ -12,3 +12,26 @@ const userWithAuthUser = Prisma.validator<Prisma.UserDefaultArgs>()({
 });
 
 export type UserWithAuthUser = Prisma.UserGetPayload<typeof userWithAuthUser>;
+
+const constraintWithMembers = Prisma.validator<Prisma.SessionConstraintDefaultArgs>()({
+    include: {
+        members: {
+            include: {
+                member: {
+                    include: {
+                        user: true
+                    }
+                }
+            }
+        },
+        shift_type: true
+    }
+});
+
+export type ConstraintWithMembers = Prisma.SessionConstraintGetPayload<typeof constraintWithMembers>;
+
+const memberWithUser = Prisma.validator<Prisma.GroupMemberDefaultArgs>()({
+    include: { user: true }
+});
+
+export type GroupMemberWithUser = Prisma.GroupMemberGetPayload<typeof memberWithUser>;

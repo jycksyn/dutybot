@@ -116,7 +116,7 @@ model SessionConstraint {
   shift_type    ShiftType                     @relation(fields: [type_id], references: [id])
   min           Int?
   max           Int?
-  everyone      Boolean
+  everyone      Boolean                       @default(false)
 }
 
 model Response {
