@@ -167,7 +167,7 @@ export const actions: Actions = {
 
         try {
             await db.sessionConstraint.delete({
-                where: { id },
+                where: { id }
             })
         } catch (e) {
             console.error(e);

@@ -100,9 +100,9 @@ model Session {
 model MembersOnSessionConstraints {
   group_id      String
   user_id       String
-  member        GroupMember       @relation(references: [group_id, user_id], fields: [group_id, user_id])
+  member        GroupMember       @relation(references: [group_id, user_id], fields: [group_id, user_id], onDelete: Cascade)
   constraint_id String
-  constraint    SessionConstraint @relation(references: [id], fields: [constraint_id])
+  constraint    SessionConstraint @relation(references: [id], fields: [constraint_id], onDelete: Cascade)
 
   @@id([group_id, user_id, constraint_id])
 }
